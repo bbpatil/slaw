@@ -14,8 +14,7 @@ omnetpp::simsignal_t
 omnetpp::simsignal_t
   TripObserver::next_waypoint_y = registerSignal("nextWaypointY");
 
-TripObserver::TripObserver() :
-  counter(0), sample_size(0)
+TripObserver::TripObserver()
 {
   getSimulation()->getSystemModule()->subscribe(trip_size, this);
   getSimulation()->getSystemModule()->subscribe(next_waypoint, this);
@@ -30,6 +29,7 @@ TripObserver::~TripObserver()
 void TripObserver::initialize()
 {
   sample_size = par("sampleSize");
+  observer_type = par("observerType").stringValue();
   std::cout << "TripObserver: " << sample_size << " trips to be observed\n";
 }
 

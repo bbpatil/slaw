@@ -10,8 +10,14 @@ void SlawMatlab::initialize() {
   planningDegree = par("planningDegree").doubleValue();
   latp.setLATP(planningDegree, getRNG(0));
   setMap();
-  setPauseTimeModel();
-  setSpeedModel();
+  pause_time = (IPauseTimeModel*) this->getSimulation()->
+    getSystemModule()->getSubmodule(pause_time_model);
+  if(!pause_time)
+    error("SlawMatlab: Invalid pause-time model");
+  speed = (ISpeedModel*) this->getSimulation()->
+    getSystemModule()->getSubmodule(speed_model);
+  if(!speed)
+    error("SlawMatlab: Invalid speed model");
   std::string filename(par("clusterList").stringValue());
   if (filename.compare("") != 0)
     loadCKFile(filename.c_str());

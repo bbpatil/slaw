@@ -12,28 +12,24 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
+#if !defined(RHEE_SPEED_MODEL_H)
+#define RHEE_SPEED_MODEL_H
 
-#ifndef I_OBSERVER_H
-#define I_OBSERVER_H
+#include "../contract/ISpeedModel.h"
 
-#include <omnetpp.h>
-
-class IObserver :
-  public omnetpp::cSimpleModule,
-  public omnetpp::cListener
+class RheeSpeedModel : 
+  public ISpeedModel,
+  public omnetpp::cSimpleModule
 {
 protected:
-  /** @brief The number of observations to be gathered to finish simulations */
-  int sample_size;
-  /** @brief The total of observations to be captured */
-  unsigned counter;
-  /** @brief  The name of the observer module */
-  const char* observer_type;
+  double speed;
+protected:
+  /** @brief Returns a speed according to the levy-walk speed model from Rhee,
+   * et al. "Levy-walk nature of human mobility", TON, 2011 */
+  void rheeModel(double);
 public:
-  IObserver() : counter(0), sample_size(0) {};
-  void initialize() = 0;
+  virtual void initialize() override;
+  virtual double computeSpeed(double par = 0.0) override;
 };
 
-Register_Abstract_Class(IObserver);
-
-#endif /* I_OBSERVER_H */
+#endif /* RHEE_SPEED_MODEL_H */

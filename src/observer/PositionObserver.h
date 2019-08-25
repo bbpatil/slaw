@@ -5,14 +5,18 @@
 #include <list>
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
 
-#include <omnetpp.h>
+#include "../contract/IObserver.h"
 #include "Coord.h"
 #include "MovingMobilityBase.h"
 
-class PositionObserver: public omnetpp::cSimpleModule,
-  public omnetpp::cListener{
+class PositionObserver: public IObserver{
 protected:
+  /** @brief The number of observations to be gathered to finish simulations */
+  int counter;
+  /** @brief  The name of the observer module */
+  const char* observer_type;
   //TODO add statistic to measure the quadrant distribution
   /** @brief Data structure storing the position of nodes in a 
    * square position system, indices correspond to the square number and values 
@@ -37,13 +41,17 @@ protected:
   unsigned computeSquare(const inet::Coord&);
   /** Returns the nine neighboring squares corresponding to a given square */
   std::list<unsigned> computeNeighboringSquares(unsigned);
+  /** @brief Computes the one hop neighborhood of a node whose ID is passed as
+   * an argument. Neighborhoods are computed using the nodeMap. This member function member also updates the ictt when receiving a signal */
+  virtual std::unordered_map<unsigned, omnetpp::simtime_t>
+  computeOneHopNeighborhood(unsigned);
 public:
   /** Subscribes to signal quadrant and initializes the class attributes*/
   PositionObserver();
   /** Unsubscribes to signal quadrant */
   virtual ~PositionObserver();
   /** Initializes the attributes of this class */
-  virtual void initialize();
+  virtual void initialize() override;
   /** This module does not receive messages */
   virtual void handleMessage(omnetpp::cMessage*);
   /** Receives the quadrant of a module and updates its one-hop neighborhod*/

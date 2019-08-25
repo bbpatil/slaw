@@ -13,27 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef I_OBSERVER_H
-#define I_OBSERVER_H
+package slaw.extra;
+import slaw.contract.ISpeedModel;
 
-#include <omnetpp.h>
-
-class IObserver :
-  public omnetpp::cSimpleModule,
-  public omnetpp::cListener
-{
-protected:
-  /** @brief The number of observations to be gathered to finish simulations */
-  int sample_size;
-  /** @brief The total of observations to be captured */
-  unsigned counter;
-  /** @brief  The name of the observer module */
-  const char* observer_type;
-public:
-  IObserver() : counter(0), sample_size(0) {};
-  void initialize() = 0;
-};
-
-Register_Abstract_Class(IObserver);
-
-#endif /* I_OBSERVER_H */
+simple NormalSpeedModel like ISpeedModel {
+    parameters:
+        @display("i=block/cogwheel");
+        double mean @unit(mps);
+        double stdDev @unit(mps);
+}

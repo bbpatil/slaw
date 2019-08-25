@@ -6,10 +6,18 @@ void SlawTransNetw::initialize() {
   walker_model = par("walkerModel").stringValue();
   walkerNum = par("numOfWalker");
   planningDegree = par("planningDegree").doubleValue();
+  speed_model = par("speedModelType").stringValue();
+  pause_time_model = par("pauseTimeModelType").stringValue();
   latp.setLATP(planningDegree, getRNG(0));
   setMap();
-  setPauseTimeModel();
-  setSpeedModel();
+  pause_time = (IPauseTimeModel*) this->getSimulation()->
+    getSystemModule()->getSubmodule(pause_time_model);
+  if(!pause_time)
+    error("SlawTransNewt: Invalid pause-time model");
+  speed = (ISpeedModel*) this->getSimulation()->
+    getSystemModule()->getSubmodule(speed_model);
+  if(!speed)
+    error("SlawTransNewt: Invalid speed model");
   std::string filename(par("clusterList").stringValue());
   if (filename.compare("") != 0)
     loadCKFile(filename.c_str());

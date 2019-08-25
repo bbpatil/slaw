@@ -28,4 +28,4 @@ public:
   virtual double computePauseTime() override;
 };
 
-#endif /* CONSTANT_PAUSE_TIME_MODEL_H */
+#endif /* NORMAL_PAUSE_TIME_MODEL_H */

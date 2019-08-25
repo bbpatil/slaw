@@ -8,13 +8,13 @@ ISlawTripManager::~ISlawTripManager() {
     delete map;
     std::cout << "Destroying map: OK" << '\n';
   }
-  if(speedModel) {
-    delete speedModel;
+  if(speed) {
+    delete speed;
     std::cout << "Destroying speed model: OK" << '\n';
   }
-  if(pauseTimeModel) {
-    delete pauseTimeModel;
-    std::cout << "Destroying pausetime model: OK" << '\n';
+  if(pause) {
+    delete pause_time;
+    std::cout << "Destroying pause-time model: OK" << '\n';
   }
   std::cout << "Walker Model  was destroyed" << '\n';
 }
@@ -47,21 +47,3 @@ void ISlawTripManager::setMap() {
     error("WalkerModel: %s could not be loaded\n", mapName.c_str());
 }
 
-void ISlawTripManager::setPauseTimeModel() {
-  PauseTimeModelType type = static_cast<PauseTimeModelType>(
-    uint8_t(par("pauseTimeModelType"))
-  );
-  double par1 = par("pausetimeA");
-  double par2 = par("pausetimeB");
-  double parH = par("pausetimeH");
-  pauseTimeModel->setModel(getRNG(0), type, par1, par2, parH);
-}
-
-void ISlawTripManager::setSpeedModel() {
-  SpeedModelType type = static_cast<SpeedModelType>(
-    uint8_t(par("speedModelType"))
-  );
-  double par1 = par("speedA");
-  double par2 = par("speedB");
-  speedModel->setModel(getRNG(0), type, par1, par2);
-}

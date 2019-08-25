@@ -20,14 +20,9 @@
 #include "../common/SlawDefs.h"
 
 class ISpeedModel {
-protected:
-  /** @brief The model name */
-  const char* model;
 public:
-  /** @brief default constructor */
-  ISpeedModel() : model(nullptr) {}
   /** @brief Returns a time according to the configured pausetime model. */
-  virtual double computeSpeed();
+  virtual double computeSpeed(double par = 0.0) = 0;
 };
 
-#endif
+#endif /* I_SPEED_MODEL_H */

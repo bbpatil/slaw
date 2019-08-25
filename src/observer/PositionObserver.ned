@@ -1,7 +1,11 @@
 package slaw.app;
 
-simple PositionObserver {
+import slaw.contract.IObserver;
+
+simple PositionObserver like Iobserver {
     @display("i=block/cogwheel");
+    int sampleSize;
+    string observerType;
     int numOfNodes;
     double radius @unit(m);
     double x_length @unit(m);

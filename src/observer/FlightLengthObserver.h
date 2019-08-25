@@ -16,13 +16,11 @@
 #ifndef FLIGHT_LENGTH_OBSERVER_H
 #define FLIGHT_LENGTH_OBSERVER_H
 
-#include <omnetpp.h>
+#include "../contract/IObserver.h"
 #include <iostream>
 
-class FlightLengthObserver: public omnetpp::cSimpleModule,
-public omnetpp::cListener {
+class FlightLengthObserver: public IObserver {
 protected:
-  unsigned numOfSamples, counter;
   bool classifyFlight;
   static omnetpp::simsignal_t flight, flight_stat;
   static omnetpp::simsignal_t intraFlightLength, intraFlightLength_stat;

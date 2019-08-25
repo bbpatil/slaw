@@ -37,15 +37,22 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/app/ConnectivityObserver.o \
-    $O/app/FlightLengthObserver.o \
-    $O/app/PositionObserver.o \
-    $O/app/TripObserver.o \
     $O/contract/ISlawTripManager.o \
-    $O/extra/PauseTimeModel.o \
-    $O/extra/SpeedModel.o \
+    $O/extra/BParetoPauseTimeModel.o \
+    $O/extra/ConstantPauseTimeModel.o \
+    $O/extra/ConstantSpeedModel.o \
+    $O/extra/NormalPauseTimeModel.o \
+    $O/extra/NormalSpeedModel.o \
+    $O/extra/RheeSpeedModel.o \
+    $O/extra/UniformPauseTimeModel.o \
+    $O/extra/UniformSpeedModel.o \
     $O/latp/LATP.o \
     $O/map/SelfsimilarWaypointMap.o \
+    $O/observer/ContactTimeObserver.o \
+    $O/observer/FlightLengthObserver.o \
+    $O/observer/InterContactTimeObserver.o \
+    $O/observer/PositionObserver.o \
+    $O/observer/TripObserver.o \
     $O/simple/SlawBonnMotion.o \
     $O/simple/SlawMobility.o \
     $O/walkermodel/SlawMatlab.o \

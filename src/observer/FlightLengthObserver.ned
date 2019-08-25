@@ -2,7 +2,7 @@ package slaw.app;
 
 simple FlightLengthObserver
 {
-    int numOfSamples;
+    int sampleSize;
     bool classifyFlight = default(false);
     @display("i=misc/sun;is=n");
     @signal[flight_stat](type=double);

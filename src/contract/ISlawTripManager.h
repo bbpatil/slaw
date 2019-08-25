@@ -18,8 +18,8 @@
 
 #include "../common/SlawDefs.h"
 #include "../map/SelfsimilarWaypointMap.h"
-#include "../extra/SpeedModel.h"
-#include "../extra/PauseTimeModel.h"
+#include "../contract/ISpeedModel.h"
+#include "../contract/IPauseTimeModel.h"
 #include "../latp/LATP.h"
 
 class ISlawTripManager: public omnetpp::cSimpleModule{
@@ -34,15 +34,15 @@ protected:
   LATPAlgorithm latp;
   /** @brief The name of the individual walker model */
   const char* walker_model;
+  /** @brief The name of the pause-time model */
+  const char* pause_time_model;
+  /** @brief The name of the speed model */
+  const char* speed_model;
 protected:
   /** @brief Loads a file containing the C_k set of each walker */
   void loadCKFile(char const*);
   /** @brief Initializes the self-similar waypoint map. */
   virtual void setMap();
-  /** @brief Initializes the pausetime model */
-  virtual void setPauseTimeModel();
-  /** @brief Initializes the speed model */
-  virtual void setSpeedModel();
   /** @brief Computes a new destination waypoint list according to the values of
    *  the member variable model. This member function is overridden */
   virtual WaypointList computeDestinationList(
@@ -54,9 +54,9 @@ public:
   /** @brief Object implementing the waypoint map */
   SelfsimilarWaypointMap* const map = new SelfsimilarWaypointMap;
   /** @brief Object implementing the speed model */ 
-  SpeedModel* const speedModel = new SpeedModel;
+  ISpeedModel* speed;
   /** @brief Object implementing the pause-time model */
-  PauseTimeModel* const pauseTimeModel = new PauseTimeModel;
+  IPauseTimeModel* pause_time;
 public:
 /** @brief Default destructor */
 virtual ~ISlawTripManager();

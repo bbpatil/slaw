@@ -1,5 +1,6 @@
 package slaw.simulations;
-
+import slaw.contract.ISpeedManager;
+import slaw.contract.IPauseTimeManager;
 import slaw.contract.ISlawTripManager;
 import slaw.walker.Walker;
 import slaw.app.ConnectivityObserver;
@@ -15,11 +16,15 @@ network SLAWConnectivityExperiment
         double coverageRadius @unit(m); //coverage radius
         double minInterContactTime @unit(s);
         double minLifetime @unit(s);
-        string slawModelType;
+        string slawModelType = "SlawMobility";
+        pauseTimeModel.pauseTimeModelType = default("BParetoPauseTimeModel");
+        speedModel.speedModelType = default("NormalSpeedModel");
         slaw.numOfWalker = numHosts;
         @display("bgb=2000,2000;bgg=100,2,grey50");
     submodules:
         slawtripmanager: <slawModelType> like ISlawTripManager;
+        pauseTimeModel: <pauseTimeModelType> like IPauseTimeManager;
+        speedModel: <speedModelType> like ISpeedManager;
         walker[numHosts]: Walker {
             mobilityType = "SlawMobility";
         }

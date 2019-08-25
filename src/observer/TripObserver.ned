@@ -1,8 +1,11 @@
 package slaw.app;
 
-simple TripObserver {
+import slaw.contract.IObserver;
+
+simple TripObserver like IObserver {
     @display("i=block/cogwheel");
     int sampleSize;
+    string observerType = "TripObserver";
     @signal[nextWaypointX](type=double);
     @statistic[nextWaypointX](record=vector);
     @signal[nextWaypointY](type=double);

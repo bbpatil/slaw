@@ -46,6 +46,9 @@ void PositionObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::simsigna
   EV_INFO << "Node " << nodeId << " changes its position to square "
           << currentSquare << " in coordinate <" << nodePosition[nodeId].x 
           << ", " << nodePosition[nodeId].y<< ">\n";
+  counter++;
+  if (counter >= sample_size)
+    endSimulation();
 }
 
 std::list<unsigned> PositionObserver::computeNeighboringSquares(unsigned s)
@@ -68,4 +71,29 @@ std::list<unsigned> PositionObserver::computeNeighboringSquares(unsigned s)
 unsigned PositionObserver::computeSquare(const inet::Coord& c)
 {
   return x_num * unsigned(floor(c.y / radius)) + unsigned(floor(c.x / radius));
+}
+
+std::unordered_map<unsigned, omnetpp::simtime_t>
+PositionObserver::computeOneHopNeighborhood(unsigned nodeId) {
+  std::unordered_map <unsigned, omnetpp::simtime_t> neighborhood;
+  unsigned square = computeSquare(nodePosition[nodeId]);
+  std::list<unsigned> squareList(std::move(computeNeighboringSquares(square)));
+  for (auto& square : squareList) {
+    for (auto& neighborId: nodeMap[square]) {
+      if (neighborId != nodeId) {
+        double distance = sqrt (
+          pow(nodePosition[nodeId].x - nodePosition[neighborId].x, 2) + 
+          pow(nodePosition[nodeId].y - nodePosition[neighborId].y, 2)
+        );
+        EV_INFO << "Distance between " << nodeId << " and " << neighborId << " is " << distance << '\n';
+        if (distance < radius) //Nodes are neighbors
+          neighborhood[neighborId] = omnetpp::simTime();
+      }
+    }
+  }
+  EV_INFO << "Current neighborhood of node: " << nodeId << " : ";
+  for (auto& neighbor : neighborhood)
+    EV_INFO << neighbor.first << ' ';
+  EV_INFO << '\n';
+  return neighborhood;
 }

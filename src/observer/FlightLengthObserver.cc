@@ -19,8 +19,7 @@ omnetpp::simsignal_t
   FlightLengthObserver::remote_random_area_stat = 
     registerSignal("remoteRandomArea_stat");
 
-FlightLengthObserver::FlightLengthObserver():
-  numOfSamples(0), counter(0)
+FlightLengthObserver::FlightLengthObserver()
 {
   getSimulation()->getSystemModule()->subscribe(flight, this);
   getSimulation()->getSystemModule()->subscribe(intraFlightLength, this);
@@ -51,16 +50,16 @@ FlightLengthObserver::~FlightLengthObserver()
 
 void FlightLengthObserver::initialize()
 {
-  numOfSamples = par("numOfSamples");
+  sample_size = par("sampleSize");
   classifyFlight = par("classifyFlight").boolValue();
-  std::cout << "Number of samples: " << numOfSamples << '\n';
+  std::cout << "Number of samples: " << sample_size << '\n';
   WATCH(counter);
 }
 
 void FlightLengthObserver::handleMessage(omnetpp::cMessage* msg)
 {
   if (!msg->isSelfMessage())
-    EV << "Simulation Observer: This module does not receive any messages!\n";
+    error("FlightLenghtObserver: This module does not receive any messages!\n");
 }
 
 void FlightLengthObserver::receiveSignal(
@@ -75,7 +74,7 @@ void FlightLengthObserver::receiveSignal(
       std::cout << "FlightLengthObserver: " << counter 
         << " samples have been produced\n";
   }
-  if (counter == numOfSamples) {
+  if (counter == sample_size) {
     std::cout << "FlightLengthObserver: " << counter 
       << " samples have been gathered\n";
     endSimulation();

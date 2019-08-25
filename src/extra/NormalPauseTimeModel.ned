@@ -19,7 +19,6 @@ import slaw.contract.IPauseTimeModel;
 simple NormalPauseTimeModel like IPauseTimeModel {
     parameters:
         @display("i=block/cogwheel");
-        string model = "NormalPauseTimeModel";
         double mean @unit(mps);
         double stdDev @unit(mps);
 }
