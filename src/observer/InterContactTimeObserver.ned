@@ -5,7 +5,7 @@ simple InterContactTimeObserver extends PositionObserver {
         @class(InterContactObserver);
         int sampleSize;   //number of intercontact time observations
         double minICT @unit(s);
-        int numOfNode;
+        int networkSize;
         @signal[interContactTime](type=double);
         @statistic[interContactTime](record=stats,vector; unit=s;);
 }

@@ -8,9 +8,9 @@ omnetpp::simsignal_t ContactTimeObserver::link_life_time =
 void ContactTimeObserver::initialize() {
   PositionObserver::initialize();
   sample_size = par("sampleSize");
-  network_size = par("nimOfNodes");
+  network_size = par("networkSize");
   llt_min = par("minLLT");
-  llt_t.resize(numOfNodes);
+  llt_t.resize(network_size);
   WATCH(counter);
 }
 

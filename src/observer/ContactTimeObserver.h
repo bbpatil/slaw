@@ -5,9 +5,8 @@
 #include <list>
 #include <unordered_map>
 #include <cmath>
-#include <utility>
-
 #include <omnetpp.h>
+
 #include "PositionObserver.h"
 
 class ContactTimeObserver : public PositionObserver {
@@ -24,7 +23,6 @@ protected:
   /** @brief These are signal carrying the statistics asociated to its namely */
   static omnetpp::simsignal_t link_life_time;
   omnetpp::simtime_t llt_min;
-  unsigned network_size;
 public:
   /** @brief initializes data structures and the value of radius */
   virtual void initialize() override;

@@ -9,8 +9,8 @@ void InterContactTimeObserver::initialize() {
   PositionObserver::initialize();
   sample_size = par("sampleSize");
   ict_min = par("minICT");
-  ict_t.resize(numOfNodes);
   network_size = par("numOfNodes");
+  ict_t.resize(network_size);
   WATCH(counter);
 }
 

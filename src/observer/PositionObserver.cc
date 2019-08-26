@@ -15,8 +15,8 @@ PositionObserver::~PositionObserver() {
 }
 
 void PositionObserver::initialize() {
-  numOfNodes = par("numOfNodes");
-  nodePosition.resize(numOfNodes);
+  network_size = par("networkSize");
+  nodePosition.resize(network_size);
   radius = par("radius").doubleValue();
   x_length = par("x_length").doubleValue();
   y_length = par("y_length").doubleValue();

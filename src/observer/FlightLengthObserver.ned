@@ -4,7 +4,7 @@ simple FlightLengthObserver
 {
     int sampleSize;
     bool classifyFlight = default(false);
-    @display("i=misc/sun;is=n");
+    @display("i=device/receiverdish;is=n");
     @signal[flight_stat](type=double);
     @statistic[flight_stat](record=histogram,vector; unit=m);
     @signal[intraFlightLength_stat](type=double);

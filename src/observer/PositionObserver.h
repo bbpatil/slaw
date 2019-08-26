@@ -31,7 +31,7 @@ protected:
    * the side of a square in a square position system. */
   double radius, x_length, y_length;
   /** @brief the number of nodes in the simulation */
-  unsigned numOfNodes;
+  unsigned network_size;
   /** @brief the number of squares on an axis */
   unsigned x_num, y_num;
   /** @brief the Id of the node that emitted a signal */
