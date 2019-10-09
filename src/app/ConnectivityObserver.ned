@@ -17,6 +17,6 @@ package slaw.app;
 simple ConnectivityObserver extends PositionObserver {
     parameters:
         @class(ConnectivityObserver);
-        @signal[neighborID](type=int);
-        @statistic[neighborID](record=stats, vector)
+        //Minimum time to potentially consider a contact occurs
+        int minContactTime @unit(s); 
 }
