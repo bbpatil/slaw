@@ -23,7 +23,8 @@ protected:
    *  frame transmision time */
   omnetpp::simtime_t min_contact_time;
 protected:
-
+  /** @brief Computes the one hop neighborhood of a given node */
+  std::list<unsigned> computeOneHopNeighborhood(unsigned);
 public:
   /** @brief Default constructor */
   ConnectivityObserver();

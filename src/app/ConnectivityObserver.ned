@@ -18,5 +18,7 @@ simple ConnectivityObserver extends PositionObserver {
     parameters:
         @class(ConnectivityObserver);
         //Minimum time to potentially consider a contact occurs
-        int minContactTime @unit(s); 
+        int minContactTime @unit(s);
+        //The name of the file where the adjacency matrix is saved
+        string filename;
 }
