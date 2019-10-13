@@ -15,7 +15,7 @@ protected:
    *  link_duration element is the overall time a link between two nodes
    *  was established. The start element is the time a link is established. The 
    *  status element is a boolean value indicating whether a link is up */
-  std::vector< std::vector<cell> > adjacency_matrix;
+  std::vector< std::vector<cell> >* adjacency_matrix;
   /** @brief The name of the file where the adjacency matrix is written */
   const char* filename;
   /** @brief The minimum time a link must last to consider a contact occurs. If 
@@ -28,6 +28,8 @@ protected:
 public:
   /** @brief Default constructor */
   ConnectivityObserver();
+  /** @brief Default destructor */
+  ~ConnectivityObserver();
   /** @brief Initializes the attributes of this class */
   virtual void initialize(int stage) override;
   /** @brief Receives the quadrant of a module and updates its one-hop 
