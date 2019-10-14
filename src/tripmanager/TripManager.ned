@@ -20,6 +20,7 @@ package slaw.tripmanager;
 import slaw.contract.IPauseTimeModel;
 import slaw.contract.ISpeedModel;
 import slaw.contract.IWalkerModel;
+import slaw.map.SelfSimilarWaypointMap;
 
 module TripManager
 {
@@ -33,4 +34,5 @@ module TripManager
         pausetimemodule: <pauseTimeModelType> like IPauseTimeModel;
         speedmodule: <speedModelType> like ISpeedModel;
         walkermodel: <walkerModelType> like IWalkerModel;
+        mapmodule: SelfSimilarWaypointMap;
 }

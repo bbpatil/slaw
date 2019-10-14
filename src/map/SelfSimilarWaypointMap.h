@@ -13,37 +13,35 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef SELFSIMILARWAYPOINTMAP_H_
-#define SELFSIMILARWAYPOINTMAP_H_
+#ifndef SelfSimilarWaypointMap_H_
+#define SelfSimilarWaypointMap_H_
+
+#include <omnetpp.h>
 
 #include "../common/SlawDefs.h"
 
 //TODO: Make this class a simple module showing waypoints and clusters
 //TODO: Create self-similar waypoint maps
-class SelfsimilarWaypointMap {
+class SelfSimilarWaypointMap : public omnetpp::cSimpleModule {
 protected:
   /** @brief Parameter determining the selfsimilarity degree of a waypoint
    * map, where 0.5 < hurstParameter < 1.0 */
-  double hurstParameter;
+  double hurst_parameter;
   /** @brief The number of waypoints integrating a self-similar waypoint map*/
-  uint16_t numberOfWaypoints;
+  uint16_t waypoint_number;
   /** @brief The radius, in meters, determining the min distance among of 
    *  clusters */
-  double clusteringRadius;
+  double clustering_radius;
   /** @brief Name of the containing the set of waypoints */
-  std::string mapName;
+  const char* map_name;
 protected:
   /** @brief Vector storing vectors of waypoints (coordinates),
    * in this structure indices corresponds to the ID of each cluster.*/
-  std::vector<Area>* areaVector;
+  std::vector<Area>* area_vector;
   /** @brief Vector storing the weights of each confined area.*/
-  //std::vector<double>* weightVector;
-
-  /** @brief Vector storing the weights of each confined area.*/
-  std::vector<unsigned>* weightVector;
-  
+  std::vector<unsigned>* weight_vector;
   /** @brief Unordered map holding pairs <coord, areaID> */
-  std::unordered_map<inet::Coord, unsigned> areaIDMap;
+  std::unordered_map<inet::Coord, unsigned> area_id_map;
 protected:
   /** @brief Loads a file containing waypoints distributed in a
    * self-similar manner and save the contain in a list*/
@@ -65,18 +63,22 @@ protected:
   /** @brief Evaluates if there are repeated coordinates in the waypoint list */
   virtual bool testWaypointList(WaypointList);
 public:
-  SelfsimilarWaypointMap() { }
-  virtual ~SelfsimilarWaypointMap();
-  /** @brief Tries to load a file containing a set
-   * of waypoint clusters. If such file does not exist, then it loads waypoints
-   * from a file whose name is saved in mapName and then it creates clusters
-   * of waypoints that are saved in a hidden file. The first parameter of this
-   * method is the map name, the second one is the clustering radius, the
-   * third and the last one are the map dimension */
-  virtual bool setMap(std::string&, double, double);
+  SelfSimilarWaypointMap() { }
+  virtual ~SelfSimilarWaypointMap();
+  /** @brief Returns the number of stages needed to initialize a SLAW 
+   *  simulation */
+  virtual int numInitStages() const override {return 5;}
+  /** @brief Initializes the parameters of this module from the omnetpp.ini 
+   *  configuration file. It tries to load a file containing a set
+   *  of waypoint clusters. If such file does not exist, then it loads waypoints
+   *  from a file whose name is saved in mapName and then it creates clusters
+   *  of waypoints that are saved in a hidden file. The first parameter of this
+   *  method is the map name, the second one is the clustering radius, the
+   *  third and the last one are the map dimension */
+  virtual void initialize(int stage) override;
   /** @brief Creates a selfsimilar waypoint map */
   //virtual void createMap();
-  virtual unsigned getNumberOfWaypoints(){ return numberOfWaypoints;}
+  virtual unsigned getNumberOfWaypoints(){ return waypoint_number;}
   /** @brief Returns the number of confined areas integrating the map */
   virtual int getNumberOfAreas();
   /** @brief Returns a pointer to the vector storing the waypoints comprising
@@ -100,6 +102,8 @@ public:
   virtual unsigned getAreaID(inet::Coord&);
   /* @brief Returs true when a the areaID of two waypoints is not equal */
   virtual bool isSameArea(inet::Coord&, inet::Coord&);
+  /* @brief Returns the map name **/
+  virtual const char* getMapName() { return map_name; }
 };
 
-#endif /* SELFSIMILARWAYPOINTMAP_H_ */
+#endif /* SelfSimilarWaypointMap_H_ */

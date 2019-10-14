@@ -43,7 +43,7 @@ OBJS = \
     $O/app/TripObserver.o \
     $O/contract/IWalkerModel.o \
     $O/latp/LATP.o \
-    $O/map/SelfsimilarWaypointMap.o \
+    $O/map/SelfSimilarWaypointMap.o \
     $O/mobility/SlawBonnMotion.o \
     $O/mobility/SlawMobility.o \
     $O/pausetime/BParetoPauseTimeModel.o \

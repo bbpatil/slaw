@@ -24,11 +24,8 @@ simple SlawTransNetw like IWalkerModel {
     @display("i=block/cogwheel");
     string walkerModel = "SlawTransNetw";
     int numOfWalker;
-    string mapName;
-    string clusterList;
-    double clusteringRadius @unit(m);
     string pauseTimeModule = "pausetimemodule";
     string speedModule = "speedmodule";
+    string mapModule = "mapmodule";
     double planningDegree;
-    double hurstParameter;  
 }
