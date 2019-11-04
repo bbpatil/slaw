@@ -10,13 +10,17 @@ void SlawMatlab::initialize(int stage) {
     waypointRatio = par("waypointRatio");
     planningDegree = par("planningDegree").doubleValue();
     latp.setLATP(planningDegree, getRNG(0));
+  }
+  else if (stage == 1) {
+    map = (SelfSimilarWaypointMap*) this->getSimulation()->
+      getSystemModule()->getSubmodule("tripmanager")->getSubmodule(par("mapModule").stringValue());
+    if (!map)
+      error("Invalid self-similar waypoint map module");
     std::string filename(par("clusterList").stringValue());
     if (filename.compare("") != 0)
       loadCKFile(filename.c_str());
     else
       assignConfinedAreas();
-  }
-  else if (stage == 3) {
     pause_time = (IPauseTimeModel*) this->getSimulation()->
       getSystemModule()->getSubmodule("tripmanager")->getSubmodule(par("pauseTimeModule").stringValue());
     if (!pause_time)
@@ -25,10 +29,6 @@ void SlawMatlab::initialize(int stage) {
       getSystemModule()->getSubmodule("tripmanager")->getSubmodule(par("speedModule").stringValue());
     if (!speed)
       error("Invalid speed module");
-    map = (SelfSimilarWaypointMap*) this->getSimulation()->
-      getSystemModule()->getSubmodule("tripmanager")->getSubmodule(par("mapModule").stringValue());
-    if (!map)
-      error("Invalid self-similar waypoint map module");
   }
 }
 

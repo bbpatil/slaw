@@ -19,7 +19,6 @@ simple SelfSimilarWaypointMap {
   parameters:
     @display("i=misc/globe");
     string mapName;
-    string clusterList;
     double clusteringRadius @unit(m);
     double hurstParameter;  
 }

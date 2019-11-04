@@ -21,11 +21,10 @@ SlawMobility::SlawMobility() :
 { }
 
 void SlawMobility::initialize(int stage) {
-  if(stage > 1) {
-    LineSegmentsMobilityBase::initialize(stage - 2);
+  if(stage > 2)
+    LineSegmentsMobilityBase::initialize(stage - 3);
+  else if (stage == 2) {
     classifyFlight = par("classifyFlight").boolValue();
-  }
-  else if (stage == 1) {
     auto walker_model = par("walkerModuleName").stringValue();
     slaw = (IWalkerModel*) this->getSimulation()->
       getSystemModule()->getSubmodule("tripmanager")->getSubmodule(walker_model);

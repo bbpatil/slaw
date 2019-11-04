@@ -3,11 +3,6 @@
 Register_Abstract_Class(IWalkerModel);
 
 IWalkerModel::~IWalkerModel() {
-  std::cout << "WalkerModel\n";
-  if (map) {
-    delete map;
-    std::cout << "Destroying map: OK" << '\n';
-  }
   std::cout << "Walker Model  was destroyed" << '\n';
 }
 

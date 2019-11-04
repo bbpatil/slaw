@@ -67,7 +67,7 @@ public:
   virtual ~SelfSimilarWaypointMap();
   /** @brief Returns the number of stages needed to initialize a SLAW 
    *  simulation */
-  virtual int numInitStages() const override {return 5;}
+  virtual int numInitStages() const override { return 6; }
   /** @brief Initializes the parameters of this module from the omnetpp.ini 
    *  configuration file. It tries to load a file containing a set
    *  of waypoint clusters. If such file does not exist, then it loads waypoints

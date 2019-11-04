@@ -24,6 +24,7 @@ simple SlawMatlab like IWalkerModel {
     string pauseTimeModule = "pausetimemodule";
     string speedModule = "speedmodule";
     string mapModule = "mapmodule";
+    string clusterList;
     int numOfWalker;
     double planningDegree;
     double clusterRatio;
