@@ -16,7 +16,6 @@
 #include "SelfSimilarWaypointMap.h"
 Define_Module(SelfSimilarWaypointMap);
 
-
 //The input is the map name and the clustering radius
 void SelfSimilarWaypointMap::initialize(int stage) {
   if (stage == 0) {
@@ -26,7 +25,8 @@ void SelfSimilarWaypointMap::initialize(int stage) {
     bool success = true;
     area_vector = new std::vector<Area>;
     weight_vector = new std::vector<unsigned>;
-    if (!loadAreaVector()) {
+    bool clfExists = loadAreaVector(); //clf means cluster list file
+    if (!clfExists) {
       std::cout << "Self-similar map: Load selfsimilar waypoint map from " 
         << map_name << std::endl;
       std::list<inet::Coord> waypointList;
@@ -35,10 +35,13 @@ void SelfSimilarWaypointMap::initialize(int stage) {
         computeConfinedAreas(waypointList);
         computeAreaWeights();
         saveAreaVector();
+        drawMap();
       }
       else
         error("SelfSimilarWaypointMap: load map fails\n");
     }
+    else
+      drawMap();
   }
 }
 
@@ -233,6 +236,21 @@ bool SelfSimilarWaypointMap::isSameArea(inet::Coord& c1, inet::Coord& c2) {
   return area_id_map[c1] == area_id_map[c2];
 }
 
+void SelfSimilarWaypointMap::drawMap() {
+  std::cout << "Drawing self-similar map\n";
+  std::cout << "Area vector size: " << area_vector->size() << '\n';
+  omnetpp::cCanvas* simulation_canvas = getSystemModule()->getCanvas();
+  for (auto& area : *area_vector)
+    for (auto& coordinate : area) {
+      omnetpp::cTextFigure* point = new omnetpp::cTextFigure;
+      point->setColor(omnetpp::cFigure::RED);
+      point->setPosition(omnetpp::cFigure::Point(coordinate.x, coordinate.y));
+      point->setFont(omnetpp::cFigure::Font("DejaVuSansMono", 16, omnetpp::cFigure::FONT_BOLD));
+      point->setText("+");
+      point->setZIndex(-1.0);
+      simulation_canvas->addFigure(point);
+    }
+}
 
 // DEPRECATED
 // void SelfSimilarWaypointMap::computeConfinedAreas(std::list<inet::Coord>& 

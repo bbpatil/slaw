@@ -25,7 +25,7 @@ network SLAWTripObserver
         tripmanager.speedModelType = speedModelType;
         @display("bgb=2000,2000;bgg=100,1,grey50");
     submodules:
-        tripmanager: TripManager;
         observer: <observerType> like IObserver;
         walker: Walker;
+        tripmanager: TripManager;
 }

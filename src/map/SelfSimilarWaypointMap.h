@@ -62,6 +62,8 @@ protected:
   virtual void computeAreaWeights();
   /** @brief Evaluates if there are repeated coordinates in the waypoint list */
   virtual bool testWaypointList(WaypointList);
+  /** @brief Draws the self-similar waypoint map in the simulation canvas */
+  virtual void drawMap();
 public:
   SelfSimilarWaypointMap() { }
   virtual ~SelfSimilarWaypointMap();
