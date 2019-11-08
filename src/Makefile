@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for slaw
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -I/home/geo/inet4/src/inet/common/geometry/common/ -I/home/geo/inet4/src/inet/common/ -I/home/geo/inet4/src/ -I/home/geo/inet4/src/inet/mobility/base/ -I/home/geo/inet4/src/inet/mobility/contract/ -I/home/geo/inet4/src/inet/mobility/single/ -L/home/geo/inet4/out/gcc-release/src/ -lINET -o slaw
+#  opp_makemake -f --deep -I/home/geo/inet4/src/inet/common/geometry/common/ -I/home/geo/inet4/src/inet/common/ -I/home/geo/inet4/src/ -I/home/geo/inet4/src/inet/mobility/base/ -I/home/geo/inet4/src/inet/mobility/contract/ -I/home/geo/inet4/src/inet/mobility/single/ -L/home/geo/inet4/out/gcc-release/src/ -lINET -lCGAL -lgmp -o slaw
 #
 
 # Name of target to be created (-o option)
@@ -28,7 +28,7 @@ INCLUDE_PATH = \
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = $(LDFLAG_LIBPATH)/home/geo/inet4/out/gcc-release/src/  -lINET
+LIBS = $(LDFLAG_LIBPATH)/home/geo/inet4/out/gcc-release/src/  -lINET -lCGAL -lgmp
 
 # Output directory
 PROJECT_OUTPUT_DIR = out

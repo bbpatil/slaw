@@ -17,6 +17,10 @@
 #define SelfSimilarWaypointMap_H_
 
 #include <omnetpp.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/ch_eddy.h>
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef K::Point_2 point_2;
 
 #include "../common/SlawDefs.h"
 
@@ -34,6 +38,10 @@ protected:
   double clustering_radius;
   /** @brief Name of the containing the set of waypoints */
   const char* map_name;
+  /** @brief The ID of the area to be observed */
+  int observation_area;
+  /** @brief A pointer to the canvas of the network */
+  omnetpp::cCanvas* simulation_canvas;
 protected:
   /** @brief Vector storing vectors of waypoints (coordinates),
    * in this structure indices corresponds to the ID of each cluster.*/
@@ -42,6 +50,8 @@ protected:
   std::vector<unsigned>* weight_vector;
   /** @brief Unordered map holding pairs <coord, areaID> */
   std::unordered_map<inet::Coord, unsigned> area_id_map;
+  /** @brief Vector storing the convex hull of the observed area */
+  std::vector<point_2> convexhull;
 protected:
   /** @brief Loads a file containing waypoints distributed in a
    * self-similar manner and save the contain in a list*/
@@ -64,6 +74,8 @@ protected:
   virtual bool testWaypointList(WaypointList);
   /** @brief Draws the self-similar waypoint map in the simulation canvas */
   virtual void drawMap();
+  /** @brief Draws the convex hull of an observation area*/
+  virtual void drawConvexHull();
 public:
   SelfSimilarWaypointMap() { }
   virtual ~SelfSimilarWaypointMap();

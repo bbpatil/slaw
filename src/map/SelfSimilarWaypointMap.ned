@@ -20,5 +20,6 @@ simple SelfSimilarWaypointMap {
     @display("i=misc/globe");
     string mapName;
     double clusteringRadius @unit(m);
-    double hurstParameter;  
+    double hurstParameter;
+    int observationArea = default(-1);
 }

@@ -23,7 +23,7 @@ network SLAWTripObserver
         tripmanager.walkermodel.numOfWalker = default(1);
         tripmanager.pauseTimeModelType = pauseTimeModelType;
         tripmanager.speedModelType = speedModelType;
-        @display("bgb=2000,2000;bgg=100,1,grey50");
+        @display("bgb=2000,2000;bgg=100,1,grey10");
     submodules:
         observer: <observerType> like IObserver;
         walker: Walker;

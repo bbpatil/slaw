@@ -19,9 +19,11 @@ Define_Module(SelfSimilarWaypointMap);
 //The input is the map name and the clustering radius
 void SelfSimilarWaypointMap::initialize(int stage) {
   if (stage == 0) {
+    simulation_canvas = getSystemModule()->getCanvas();
     hurst_parameter = par("hurstParameter").doubleValue();
     clustering_radius = par("clusteringRadius");
     map_name = par("mapName").stringValue();
+    observation_area = par("observationArea");
     bool success = true;
     area_vector = new std::vector<Area>;
     weight_vector = new std::vector<unsigned>;
@@ -36,12 +38,15 @@ void SelfSimilarWaypointMap::initialize(int stage) {
         computeAreaWeights();
         saveAreaVector();
         drawMap();
+        drawConvexHull();
       }
       else
         error("SelfSimilarWaypointMap: load map fails\n");
     }
-    else
+    else{
       drawMap();
+      drawConvexHull();
+    }
   }
 }
 
@@ -239,17 +244,44 @@ bool SelfSimilarWaypointMap::isSameArea(inet::Coord& c1, inet::Coord& c2) {
 void SelfSimilarWaypointMap::drawMap() {
   std::cout << "Drawing self-similar map\n";
   std::cout << "Area vector size: " << area_vector->size() << '\n';
-  omnetpp::cCanvas* simulation_canvas = getSystemModule()->getCanvas();
-  for (auto& area : *area_vector)
+  for (auto& area : *area_vector) {
+    std::cout << "area size: " << area.size() << '\n';
     for (auto& coordinate : area) {
-      omnetpp::cTextFigure* point = new omnetpp::cTextFigure;
-      point->setColor(omnetpp::cFigure::RED);
-      point->setPosition(omnetpp::cFigure::Point(coordinate.x, coordinate.y));
-      point->setFont(omnetpp::cFigure::Font("DejaVuSansMono", 16, omnetpp::cFigure::FONT_BOLD));
-      point->setText("+");
+      omnetpp::cRectangleFigure* point = new omnetpp::cRectangleFigure;
+      point->setBounds(omnetpp::cFigure::Rectangle(10, 10, 10, 10));
+      point->setFilled(true);
+      point->setFillColor(omnetpp::cFigure::BLUE);
+      point->setPosition(omnetpp::cFigure::Point(coordinate.x, coordinate.y), omnetpp::cFigure::ANCHOR_CENTER);
       point->setZIndex(-1.0);
       simulation_canvas->addFigure(point);
     }
+  }
+}
+
+void SelfSimilarWaypointMap::drawConvexHull() {
+  std::vector<point_2> observered_area;
+  omnetpp::cPolygonFigure *cv = new omnetpp::cPolygonFigure("convexhull");
+  std::vector<omnetpp::cFigure::Point> cv_point;
+  if (observation_area == -1) {
+    size_t size_max = 0;
+    for (int i = 0; i < area_vector->size(); i++)
+      if (area_vector->at(i).size() > size_max) {
+        observation_area = i;
+        size_max = area_vector->at(i).size();
+      }
+  }
+  for (auto& point : area_vector->at(observation_area)) 
+    observered_area.push_back(point_2(point.x, point.y));
+  CGAL::ch_eddy(observered_area.begin(), observered_area.end(), std::back_inserter(convexhull));
+  std::cout << "Convex hull:" << '\n';
+  for (auto& point : convexhull) {
+    cv_point.push_back(omnetpp::cFigure::Point(point.x(), point.y()));
+    std::cout << point.x() << ' ' << point.y() << '\n';
+  }
+  cv->setPoints(cv_point);
+  cv->setLineColor(omnetpp::cFigure::BLUE);
+  cv->setLineWidth(1);
+  simulation_canvas->addFigure(cv);
 }
 
 // DEPRECATED
