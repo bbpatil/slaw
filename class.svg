@@ -2066,7 +2066,7 @@
              sodipodi:role="line"
              x="20.25231"
              y="194.903"
-             style="font-size:2.82222223px;line-height:0.35277778px;stroke-width:0.26458332"># processSignal(nodeId: int, flightLength: double)</tspan></text>
+             style="font-size:2.82222223px;line-height:0.35277778px;stroke-width:0.26458332"># processSignal(node_id: int, flightLength: double)</tspan></text>
         <path
            style="fill:none;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            d="M 19.877953,176.30236 H 135.43071"
@@ -2122,12 +2122,12 @@
              x="20.682154"
              y="149.62903"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:0.35277778px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.26458332"
-             id="tspan839-2-0-6-6"># nodeMap: vector&lt; list&lt;int&gt; &gt;</tspan><tspan
+             id="tspan839-2-0-6-6"># node_map: vector&lt; list&lt;int&gt; &gt;</tspan><tspan
              id="tspan1268-4-0"
              sodipodi:role="line"
              x="20.682154"
              y="152.80403"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:0.35277778px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.26458332"># nodePosition: vector &lt;Coord&gt;</tspan><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:0.35277778px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.26458332"># node_position: vector &lt;Coord&gt;</tspan><tspan
              sodipodi:role="line"
              x="20.682154"
              y="155.97903"
@@ -2162,7 +2162,7 @@
              x="20.682154"
              y="175.02902"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222223px;line-height:0.35277778px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.26458332"
-             id="tspan1530"># nodeId: int</tspan><tspan
+             id="tspan1530"># node_id: int</tspan><tspan
              id="tspan1364-4"
              sodipodi:role="line"
              x="20.682154"
@@ -2208,7 +2208,7 @@
              x="20.25231"
              y="201.25296"
              style="font-size:2.82222223px;line-height:0.35277778px;stroke-width:0.26458332"
-             id="tspan3394"># computeOneHopNeighborhood(nodeId: int) : unordered_map &lt;int, simtime_t&gt;</tspan><tspan
+             id="tspan3394"># computeOneHopNeighborhood(node_id: int) : unordered_map &lt;int, simtime_t&gt;</tspan><tspan
              sodipodi:role="line"
              x="20.25231"
              y="204.42796"

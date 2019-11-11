@@ -114,10 +114,15 @@ public:
   virtual void randomizeArea(omnetpp::cRNG*, unsigned);
   /** @brief Returns the areaID matching a given waypoint */
   virtual unsigned getAreaID(inet::Coord&);
-  /* @brief Returs true when a the areaID of two waypoints is not equal */
+  /* @brief Returns true when a the areaID of two waypoints is not equal */
   virtual bool isSameArea(inet::Coord&, inet::Coord&);
-  /* @brief Returns the map name **/
+  /** @brief Returns the map name **/
   virtual const char* getMapName() { return map_name; }
+  /** @brief Returns the convex hull of the observation area */
+  virtual const std::vector<point_2>* getConvexHull() {
+    const std::vector<point_2>* ch = &convexhull;
+    return ch;
+  }
 };
 
 #endif /* SelfSimilarWaypointMap_H_ */

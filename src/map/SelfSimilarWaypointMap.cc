@@ -243,9 +243,7 @@ bool SelfSimilarWaypointMap::isSameArea(inet::Coord& c1, inet::Coord& c2) {
 
 void SelfSimilarWaypointMap::drawMap() {
   std::cout << "Drawing self-similar map\n";
-  std::cout << "Area vector size: " << area_vector->size() << '\n';
   for (auto& area : *area_vector) {
-    std::cout << "area size: " << area.size() << '\n';
     for (auto& coordinate : area) {
       omnetpp::cRectangleFigure* point = new omnetpp::cRectangleFigure;
       point->setBounds(omnetpp::cFigure::Rectangle(10, 10, 10, 10));

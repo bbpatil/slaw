@@ -2,10 +2,9 @@ package slaw.simulations;
 
 import slaw.contract.IObserver;
 import slaw.walker.Walker;
-import slaw.app.ConnectivityObserver;
 import slaw.tripmanager.TripManager;
 
-network SLAWConnectivityExperiment
+network SLAWConnectivityEvaluation
 {
     parameters:
         int numHosts;
@@ -13,29 +12,28 @@ network SLAWConnectivityExperiment
         double width @unit(m); //length of the x-axis
         double height @unit(m); //length of the y-axis
         double coverageRadius @unit(m); //coverage radius
-        double minInterContactTime @unit(s);
         double minLifetime @unit(s);
         string walkerModelType;
         string pauseTimeModelType;
         string speedModelType;
+        string filename;
         tripmanager.walkerModelType = walkerModelType;
         tripmanager.walkermodel.numOfWalker = numHosts;
         tripmanager.pauseTimeModelType = pauseTimeModelType;
-        tripmanager.speedModelType = speedModelType;        
-        string observerType = "InterContactTimeObserver";
+        tripmanager.speedModelType = speedModelType;
         @display("bgb=2000,2000;bgg=100,2,grey50");
     submodules:
         tripmanager: TripManager;
         walker[numHosts]: Walker {
             mobilityType = "SlawMobility";
         }
-        observer: <observerType> like IObserver {
+        observer: <"ConnectivityObserver"> like IObserver {
+            filename = filename;
             numOfNodes = numHosts;
             observations = observations;
             x_length = width;
             y_length = height;
             radius = coverageRadius;
-            minICT = minInterContactTime;
             minLLT = minLifetime;
             @display("p=480,400");
         }
