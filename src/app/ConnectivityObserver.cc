@@ -48,8 +48,10 @@ ConnectivityObserver::computeOneHopNeighborhood(int id) {
           pow(node_position[node_id].x - node_position[neighborId].x, 2) + 
           pow(node_position[node_id].y - node_position[neighborId].y, 2)
         );
-        EV_INFO << "Distance between " << node_id << " and " << neighborId << " is " << distance << '\n';
+        std::cout << "Distance between " << node_id << " and " << neighborId << " is " << distance << '\n';
         //Nodes are neighbors being at the observation area
+        std::cout << "Node position: " << node_position[node_id] << '\n';
+        std::cout << "Neighbor position: " << node_position[neighborId] << '\n';
         if ((distance < radius) && isInObservationArea(node_position[neighborId])) 
           neighborhood.push_back(std::make_pair(neighborId, omnetpp::simTime()));
       }
@@ -59,16 +61,20 @@ ConnectivityObserver::computeOneHopNeighborhood(int id) {
 }
 
 void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::simsignal_t id, omnetpp::cObject* value, omnetpp::cObject* details) {
+  PositionObserver::receiveSignal(src, id, value, details);
   auto state = dynamic_cast<inet::MovingMobilityBase*>(value);
   inet::Coord current_position(state->getCurrentPosition());
   if (isInObservationArea(current_position)) {
-    PositionObserver::receiveSignal(src, id, value, details);
     std::list<neighbor> current_neighborhood = computeOneHopNeighborhood(node_id);
     std::list<neighbor> new_neighbor, old_neighbor;
 
     //Prints current neighborhood
+    std::cout << "Current neighborhood of node " << node_id << ":\n";
+    for (auto& entry : current_neighborhood)
+      std::cout << "\tid: " << entry.first << " start time: " << entry.second << "\n";
 
     //Finds new neighbors
+    std::cout << "New neighbors of node " << node_id << ":\n";
     for (auto& cn : current_neighborhood)
       if (
         std::find_if(
@@ -76,29 +82,33 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
           neighborhood_list->at(node_id).end(),
           [cn] (neighbor x) { return cn.first == x.first; }
         ) == neighborhood_list->at(node_id).end()
-      )
+      ) {
         neighborhood_list->at(node_id).push_back(cn);
+        std::cout << "\tid: " << cn.first << " time: " << cn.second << "\n";
+      }
 
     //Prints new-neighbor's id
 
     //Finds old neighbors, the iterator it points to a node in N(node_id)
-    auto it =  neighborhood_list->at(node_id).begin();
-    while (it != neighborhood_list->at(node_id).end()) {
-      auto jt = std::find_if(
+    std::cout << "Old neighbors of node " << node_id << ":\n";
+    auto n_it =  neighborhood_list->at(node_id).begin();
+    while (n_it != neighborhood_list->at(node_id).end()) {
+      auto n_jt = std::find_if(
                   current_neighborhood.begin(),
                   current_neighborhood.end(),
-                  [it] (neighbor x) { return x.first == it->first; }
+                  [n_it] (neighbor x) { return x.first == n_it->first; }
                 );
-      if (jt == neighborhood_list->at(node_id).end()) {
-        omnetpp::simtime_t link_lifetime = omnetpp::simTime() - it->second;
+      if (n_jt == neighborhood_list->at(node_id).end()) {
+        omnetpp::simtime_t link_lifetime = omnetpp::simTime() - n_it->second;
         if (link_lifetime > llt_min) {
-          adjacency_matrix->at(node_id).at(it->first) += link_lifetime;
+          adjacency_matrix->at(node_id).at(n_it->first) += link_lifetime;
           observation_counter++;
+          std::cout << "\tid: " << n_it->first << " time: " << n_it->second << "\n";
         }
-        neighborhood_list->at(node_id).erase(it++);
+        neighborhood_list->at(node_id).erase(n_it++);
       }
       else 
-        ++it;
+        ++n_it;
     }
 
     //Prints old-neighbor's id

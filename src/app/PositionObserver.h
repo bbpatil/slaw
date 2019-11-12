@@ -18,7 +18,7 @@ protected:
    * square position system, indices correspond to the square number and values 
    * are lists of the node IDs located in a square */
   std::vector< std::list<unsigned> > node_map;
-  /**@ brief Data structures storing the square number of a node with index i */
+  /**@ brief Data structures storing the coordinate of a node with index i */
   std::vector<inet::Coord> node_position;
   /** @brief the signal ID carriying the quadrant where a emitting node is 
    * located */

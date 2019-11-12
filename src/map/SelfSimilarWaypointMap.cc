@@ -246,9 +246,9 @@ void SelfSimilarWaypointMap::drawMap() {
   for (auto& area : *area_vector) {
     for (auto& coordinate : area) {
       omnetpp::cRectangleFigure* point = new omnetpp::cRectangleFigure;
-      point->setBounds(omnetpp::cFigure::Rectangle(10, 10, 10, 10));
+      point->setBounds(omnetpp::cFigure::Rectangle(5, 5, 5, 5));
       point->setFilled(true);
-      point->setFillColor(omnetpp::cFigure::BLUE);
+      point->setFillColor(omnetpp::cFigure::GREY);
       point->setPosition(omnetpp::cFigure::Point(coordinate.x, coordinate.y), omnetpp::cFigure::ANCHOR_CENTER);
       point->setZIndex(-1.0);
       simulation_canvas->addFigure(point);

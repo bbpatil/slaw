@@ -15,20 +15,18 @@ PositionObserver::~PositionObserver() {
 }
 
 void PositionObserver::initialize(int stage) {
-  if (stage == 0) {
-    node_number = par("numOfNodes");
-    node_position.resize(node_number);
-    radius = par("radius").doubleValue();
-    x_length = par("x_length").doubleValue();
-    y_length = par("y_length").doubleValue();
-    x_num = unsigned( ceil(x_length / radius) );
-    y_num = unsigned( ceil(y_length / radius) );
-    node_map.resize(x_num * y_num);
-  }
+  node_number = par("numOfNodes");
+  node_position.resize(node_number);
+  radius = par("radius").doubleValue();
+  x_length = par("x_length").doubleValue();
+  y_length = par("y_length").doubleValue();
+  x_num = unsigned( ceil(x_length / radius) );
+  y_num = unsigned( ceil(y_length / radius) );
+  node_map.resize(x_num * y_num);
 }
 
 void PositionObserver::handleMessage(omnetpp::cMessage* msg) {
-  error("Connectivity Observer: This module does not receive messages");
+  error("Position Observer: This module does not receive messages");
 }
 
 void PositionObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::simsignal_t id, omnetpp::cObject* value, omnetpp::cObject* details) {
