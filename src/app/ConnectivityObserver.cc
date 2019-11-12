@@ -1,6 +1,8 @@
 #include "ConnectivityObserver.h"
 Define_Module(ConnectivityObserver);
 
+omnetpp::simsignal_t ConnectivityObserver::membership_stat = registerSignal("membership");
+
 ConnectivityObserver::ConnectivityObserver()
   : adjacency_matrix(nullptr), neighborhood_list(nullptr), llt_min(0.0), observation_counter(0)
   { }
@@ -8,11 +10,11 @@ ConnectivityObserver::ConnectivityObserver()
 ConnectivityObserver::~ConnectivityObserver() {
   if (adjacency_matrix) {
     delete(adjacency_matrix);
-    std::cout << "ConnectivityObserver: Delete adjacency_matrix\n";
+    EV << "ConnectivityObserver: Delete adjacency_matrix\n";
   }
   if (neighborhood_list) {
     delete(neighborhood_list);
-    std::cout << "ConnectivityObserver: Delete neighborhood list\n";
+    EV << "ConnectivityObserver: Delete neighborhood list\n";
   }
 }
 
@@ -48,10 +50,10 @@ ConnectivityObserver::computeOneHopNeighborhood(int id) {
           pow(node_position[node_id].x - node_position[neighborId].x, 2) + 
           pow(node_position[node_id].y - node_position[neighborId].y, 2)
         );
-        std::cout << "Distance between " << node_id << " and " << neighborId << " is " << distance << '\n';
+        EV << "Distance between " << node_id << " and " << neighborId << " is " << distance << '\n';
         //Nodes are neighbors being at the observation area
-        std::cout << "Node position: " << node_position[node_id] << '\n';
-        std::cout << "Neighbor position: " << node_position[neighborId] << '\n';
+        EV << "Node position: " << node_position[node_id] << '\n';
+        EV << "Neighbor position: " << node_position[neighborId] << '\n';
         if ((distance < radius) && isInObservationArea(node_position[neighborId])) 
           neighborhood.push_back(std::make_pair(neighborId, omnetpp::simTime()));
       }
@@ -61,6 +63,8 @@ ConnectivityObserver::computeOneHopNeighborhood(int id) {
 }
 
 void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::simsignal_t id, omnetpp::cObject* value, omnetpp::cObject* details) {
+  int membership = 0;
+  static omnetpp::simtime_t current_time = 0.0;
   PositionObserver::receiveSignal(src, id, value, details);
   auto state = dynamic_cast<inet::MovingMobilityBase*>(value);
   inet::Coord current_position(state->getCurrentPosition());
@@ -69,12 +73,12 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
     std::list<neighbor> new_neighbor, old_neighbor;
 
     //Prints current neighborhood
-    std::cout << "Current neighborhood of node " << node_id << ":\n";
+    EV << "Current neighborhood of node " << node_id << ":\n";
     for (auto& entry : current_neighborhood)
-      std::cout << "\tid: " << entry.first << " start time: " << entry.second << "\n";
+      EV << "\tid: " << entry.first << " start time: " << entry.second << "\n";
 
     //Finds new neighbors
-    std::cout << "New neighbors of node " << node_id << ":\n";
+    EV << "New neighbors of node " << node_id << ":\n";
     for (auto& cn : current_neighborhood)
       if (
         std::find_if(
@@ -84,13 +88,13 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
         ) == neighborhood_list->at(node_id).end()
       ) {
         neighborhood_list->at(node_id).push_back(cn);
-        std::cout << "\tid: " << cn.first << " time: " << cn.second << "\n";
+        EV << "\tid: " << cn.first << " time: " << cn.second << "\n";
       }
 
     //Prints new-neighbor's id
 
     //Finds old neighbors, the iterator it points to a node in N(node_id)
-    std::cout << "Old neighbors of node " << node_id << ":\n";
+    EV << "Old neighbors of node " << node_id << ":\n";
     auto n_it =  neighborhood_list->at(node_id).begin();
     while (n_it != neighborhood_list->at(node_id).end()) {
       auto n_jt = std::find_if(
@@ -103,19 +107,25 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
         if (link_lifetime > llt_min) {
           adjacency_matrix->at(node_id).at(n_it->first) += link_lifetime;
           observation_counter++;
-          std::cout << "\tid: " << n_it->first << " time: " << n_it->second << "\n";
+          EV << "\tid: " << n_it->first << " time: " << n_it->second << "\n";
         }
         neighborhood_list->at(node_id).erase(n_it++);
       }
       else 
         ++n_it;
     }
-
-    //Prints old-neighbor's id
+    if (current_time == omnetpp::simTime())
+      membership++;
+    else {
+      std::cout << "membership at time " << current_time << " is " << membership << '\n';
+      emit(membership_stat, membership);
+      membership = 1;
+      current_time = omnetpp::simTime();
+    }
     
-
+    //Prints old-neighbor's id
     if (observation_counter == sample_size) {
-      std::cout << "ConnectivityObserver: total number of observations: "
+      EV << "ConnectivityObserver: total number of observations: "
                 << ' ' << observation_counter << '\n';
       endSimulation(); 
     }

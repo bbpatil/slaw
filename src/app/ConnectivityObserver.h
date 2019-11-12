@@ -27,6 +27,8 @@ protected:
   unsigned sample_size;
   /** @brief The current number of observations */
   unsigned observation_counter;
+  /** @brief The number of nodes each observation time */
+  static omnetpp::simsignal_t membership_stat;
 protected:
   /** @brief Data structures storing link lifetimes */
   std::vector< std::vector<omnetpp::simtime_t> >* adjacency_matrix;

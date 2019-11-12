@@ -19,4 +19,6 @@ simple ConnectivityObserver extends PositionObserver {
         @class(ConnectivityObserver);
         double minLLT @unit(s);
         string filename;
+        @signal[membership](type=long);
+        @statistic[membership](record=vector);
 }
