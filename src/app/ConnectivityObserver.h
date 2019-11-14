@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <fstream>
+#include <set>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2_algorithms.h>
 #include <omnetpp.h>
@@ -24,12 +25,14 @@ protected:
   /** @brief The minimum link lifetime to considered a link was established */
   omnetpp::simtime_t llt_min;
   /** @brief The total number of observation to be captured */
-  unsigned sample_size;
+  unsigned sample_size, membership_size;
   /** @brief The current number of observations */
   unsigned observation_counter;
   /** @brief The number of nodes each observation time */
   static omnetpp::simsignal_t membership_stat;
 protected:
+  /** @brief Nodes at an observation area */
+  std::set<unsigned> membership;
   /** @brief Data structures storing link lifetimes */
   std::vector< std::vector<omnetpp::simtime_t> >* adjacency_matrix;
   /** @brief Data structure storing N(x) with pairs <id, time> */

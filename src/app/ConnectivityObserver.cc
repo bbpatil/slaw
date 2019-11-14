@@ -27,7 +27,7 @@ void ConnectivityObserver::initialize(int stage) {
     neighborhood_list = new std::vector< std::list<neighbor> >(node_number);
     adjacency_matrix = new std::vector< std::vector<omnetpp::simtime_t> >;
     for (size_t i = 0; i < node_number; i++) {
-      std::vector<omnetpp::simtime_t> row(0.0, node_number);
+      std::vector<omnetpp::simtime_t> row(node_number, 0.0);
       adjacency_matrix->push_back(std::move(row));
     }
   }
@@ -35,6 +35,8 @@ void ConnectivityObserver::initialize(int stage) {
     auto map_ptr = this->getSimulation()->getSystemModule()->
                     getSubmodule("tripmanager")->getSubmodule("mapmodule");
     polygon = reinterpret_cast<SelfSimilarWaypointMap*>(map_ptr)->getConvexHull();
+    WATCH(membership_size);
+    WATCH(observation_counter);
   }
 }
 
@@ -63,7 +65,6 @@ ConnectivityObserver::computeOneHopNeighborhood(int id) {
 }
 
 void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::simsignal_t id, omnetpp::cObject* value, omnetpp::cObject* details) {
-  int membership = 0;
   static omnetpp::simtime_t current_time = 0.0;
   PositionObserver::receiveSignal(src, id, value, details);
   auto state = dynamic_cast<inet::MovingMobilityBase*>(value);
@@ -78,8 +79,8 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
       EV << "\tid: " << entry.first << " start time: " << entry.second << "\n";
 
     //Finds new neighbors
-    EV << "New neighbors of node " << node_id << ":\n";
-    for (auto& cn : current_neighborhood)
+    //EV << "New neighbors of node " << node_id << ":\n";
+    for (auto& cn : current_neighborhood) {
       if (
         std::find_if(
           neighborhood_list->at(node_id).begin(),
@@ -88,13 +89,18 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
         ) == neighborhood_list->at(node_id).end()
       ) {
         neighborhood_list->at(node_id).push_back(cn);
-        EV << "\tid: " << cn.first << " time: " << cn.second << "\n";
+        EV << "\tnew neighbor: " << cn.first << " time: " << cn.second << "\n";
       }
+    }
 
     //Prints new-neighbor's id
+    EV << "neighbor list of node: " << node_id << '\n';
+    for (auto& n : neighborhood_list->at(node_id)) {
+      EV << "neighbor: " << n.first << " at " << n.second << '\n';
+    }
 
     //Finds old neighbors, the iterator it points to a node in N(node_id)
-    EV << "Old neighbors of node " << node_id << ":\n";
+    //EV << "Old neighbors of node " << node_id << ":\n";
     auto n_it =  neighborhood_list->at(node_id).begin();
     while (n_it != neighborhood_list->at(node_id).end()) {
       auto n_jt = std::find_if(
@@ -102,24 +108,28 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
                   current_neighborhood.end(),
                   [n_it] (neighbor x) { return x.first == n_it->first; }
                 );
-      if (n_jt == neighborhood_list->at(node_id).end()) {
+      if (n_jt == current_neighborhood.end()) {
         omnetpp::simtime_t link_lifetime = omnetpp::simTime() - n_it->second;
         if (link_lifetime > llt_min) {
           adjacency_matrix->at(node_id).at(n_it->first) += link_lifetime;
           observation_counter++;
-          EV << "\tid: " << n_it->first << " time: " << n_it->second << "\n";
+          EV << "\told neighbor: " << n_it->first << " time: " << n_it->second << "\n";
         }
+        EV << "Erase node: " << n_it->first << '\n';
         neighborhood_list->at(node_id).erase(n_it++);
       }
       else 
         ++n_it;
     }
-    if (current_time == omnetpp::simTime())
-      membership++;
+    if (current_time == omnetpp::simTime()) {
+      membership.insert(node_id);
+      membership_size = membership.size();
+    }
     else {
-      std::cout << "membership at time " << current_time << " is " << membership << '\n';
-      emit(membership_stat, membership);
-      membership = 1;
+      emit(membership_stat, membership.size());
+      membership.clear();
+      membership.insert(node_id);
+      membership_size = 1;
       current_time = omnetpp::simTime();
     }
     
