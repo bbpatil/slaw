@@ -21,7 +21,7 @@ network SLAWConnectivityEvaluation
         tripmanager.walkermodel.numOfWalker = numHosts;
         tripmanager.pauseTimeModelType = pauseTimeModelType;
         tripmanager.speedModelType = speedModelType;
-        @display("bgb=2000,2000;bgg=100,2,grey50");
+        @display("bgb=1000,1000;bgg=100,2,grey50");
     submodules:
         tripmanager: TripManager;
         walker[numHosts]: Walker {

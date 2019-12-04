@@ -76,7 +76,7 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
     //Prints current neighborhood
     EV << "Current neighborhood of node " << node_id << ":\n";
     for (auto& entry : current_neighborhood)
-      EV << "\tid: " << entry.first << " start time: " << entry.second << "\n";
+      EV << "\tid: " << entry.first << "\n";
 
     //Finds new neighbors
     //EV << "New neighbors of node " << node_id << ":\n";
@@ -99,7 +99,7 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
       EV << "neighbor: " << n.first << " at " << n.second << '\n';
     }
 
-    //Finds old neighbors, the iterator it points to a node in N(node_id)
+    //Finds old neighbors, the iterator points to a node in N(node_id)
     //EV << "Old neighbors of node " << node_id << ":\n";
     auto n_it =  neighborhood_list->at(node_id).begin();
     while (n_it != neighborhood_list->at(node_id).end()) {
@@ -133,7 +133,6 @@ void ConnectivityObserver::receiveSignal(omnetpp::cComponent* src, omnetpp::sims
       current_time = omnetpp::simTime();
     }
     
-    //Prints old-neighbor's id
     if (observation_counter == sample_size) {
       EV << "ConnectivityObserver: total number of observations: "
                 << ' ' << observation_counter << '\n';
