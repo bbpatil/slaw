@@ -41,18 +41,18 @@ void ConnectivityObserver::initialize(int stage) {
 std::list<unsigned> 
 ConnectivityObserver::computeOneHopNeighborhood(unsigned id) {
   std::list<unsigned> neighborhood;
-  unsigned square = computeSquare(node_position[node_id]);
+  unsigned square = computeSquare(node_position[id]);
   std::list<unsigned> squareList(std::move(computeNeighboringSquares(square)));
   for (auto& square : squareList) {
     for (auto& neighborId: node_map[square]) {
-      if (neighborId != node_id) {
+      if (neighborId != id) {
         double distance = sqrt (
-          pow(node_position[node_id].x - node_position[neighborId].x, 2) + 
-          pow(node_position[node_id].y - node_position[neighborId].y, 2)
+          pow(node_position[id].x - node_position[neighborId].x, 2) + 
+          pow(node_position[id].y - node_position[neighborId].y, 2)
         );
-        std::cout << "Distance between " << node_id << " and " << neighborId << " is " << distance << '\n';
+        std::cout << "Distance between " << id << " and " << neighborId << " is " << distance << '\n';
         //Nodes are neighbors being at the observation area
-        std::cout << "Node position: " << node_position[node_id] << " at time: " << omnetpp::simTime() << '\n';
+        std::cout << "Node position: " << node_position[id] << " at time: " << omnetpp::simTime() << '\n';
         std::cout << "Neighbor position: " << node_position[neighborId] << " at time: " << omnetpp::simTime() << '\n';
         if ((distance < radius) && isInObservationArea(node_position[neighborId])) 
           neighborhood.push_back(neighborId);
@@ -147,6 +147,10 @@ void ConnectivityObserver::computeOldNeighbors(
 void ConnectivityObserver::handleMessage(omnetpp::cMessage* msg) {
   if (msg->isSelfMessage()) {
     std::cout << "Simulation time: " << omnetpp::simTime() <<'\n';
+    std::cout << "Membership: ";
+    for (auto& member : membership)
+      std::cout << member << ' ';
+    std::cout << '\n';
     for (auto& member : membership) {
       std::list<unsigned> current_neighborhood = 
         computeOneHopNeighborhood(member);
