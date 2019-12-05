@@ -12,7 +12,7 @@ network SLAWConnectivityEvaluation
         double width @unit(m); //length of the x-axis
         double height @unit(m); //length of the y-axis
         double coverageRadius @unit(m); //coverage radius
-        double minLifetime @unit(s);
+        int minLifetime @unit(s);
         string walkerModelType;
         string pauseTimeModelType;
         string speedModelType;

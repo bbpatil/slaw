@@ -12,18 +12,19 @@
 
 #include "PositionObserver.h"
 #include "../map/SelfSimilarWaypointMap.h"
+#include "../common/AdjacencyMatrix.h"
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef K::Point_2 point_2;
 
 class ConnectivityObserver : public PositionObserver {
 protected:
-  /** @brief A typedef to summarize an entry in the adjacency matrix*/
-  typedef std::pair<int, omnetpp::simtime_t> neighbor;
+  /** @brief Timer to compute the adjacency matrix*/
+  omnetpp::cMessage* msg;
   /** @brief File where the adjacency matrix will be stored */
   const char* filename;
   /** @brief The minimum link lifetime to considered a link was established */
-  omnetpp::simtime_t llt_min;
+  unsigned llt_min;
   /** @brief The total number of observation to be captured */
   unsigned sample_size, membership_size;
   /** @brief The current number of observations */
@@ -34,16 +35,20 @@ protected:
   /** @brief Nodes at an observation area */
   std::set<unsigned> membership;
   /** @brief Data structures storing link lifetimes */
-  std::vector< std::vector<omnetpp::simtime_t> >* adjacency_matrix;
+  AdjacencyMatrix adjacency_matrix;
   /** @brief Data structure storing N(x) with pairs <id, time> */
-  std::vector< std::list<neighbor> >* neighborhood_list;
+  std::vector< std::list<unsigned> >* neighborhood_list;
   /** @brief Convex hull of the observation area */
   const std::vector<point_2>* polygon;
 protected:
   /** @brief Computes the one-hop neighborhood of a node x being at observation area */
-  std::list<neighbor> computeOneHopNeighborhood(int);
+  std::list<unsigned> computeOneHopNeighborhood(unsigned);
   /** @brief Computes whether a node x is at observtion area */
   bool isInObservationArea(inet::Coord&);
+  /** @brief Computes new neighbors*/
+  void computeNewNeighbors(unsigned id, std::list<unsigned>&);
+  /** @brief Computes old neighbors*/
+  void computeOldNeighbors(unsigned id, std::list<unsigned>&);
 public:
   /** @brief default constructor */
   ConnectivityObserver();
@@ -57,6 +62,8 @@ public:
   virtual void initialize(int stage) override;
   /** @brief Writes the adjacency matrix in a file */
   virtual void finish() override;
+  /** @brief Computes the adjacency matrix */
+  virtual void handleMessage(omnetpp::cMessage*);
 };
 
 #endif
