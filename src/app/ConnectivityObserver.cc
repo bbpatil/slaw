@@ -7,13 +7,14 @@ ConnectivityObserver::ConnectivityObserver()
   : neighborhood_list(nullptr), 
     llt_min(0.0), 
     observation_counter(0), 
-    msg(nullptr)
+    msg(nullptr),
+    membership_size(0)
   { }
 
 ConnectivityObserver::~ConnectivityObserver() {
   if (neighborhood_list) {
     delete(neighborhood_list);
-    EV << "ConnectivityObserver: Delete neighborhood list\n";
+    EV_INFO << "ConnectivityObserver: Delete neighborhood list\n";
   }
 }
 
@@ -50,10 +51,10 @@ ConnectivityObserver::computeOneHopNeighborhood(unsigned id) {
           pow(node_position[id].x - node_position[neighborId].x, 2) + 
           pow(node_position[id].y - node_position[neighborId].y, 2)
         );
-        std::cout << "Distance between " << id << " and " << neighborId << " is " << distance << '\n';
+        EV_INFO << "Distance between " << id << " and " << neighborId << " is " << distance << '\n';
         //Nodes are neighbors being at the observation area
-        std::cout << "Node position: " << node_position[id] << " at time: " << omnetpp::simTime() << '\n';
-        std::cout << "Neighbor position: " << node_position[neighborId] << " at time: " << omnetpp::simTime() << '\n';
+        EV_INFO << "Node position: " << node_position[id] << " at time: " << omnetpp::simTime() << '\n';
+        EV_INFO << "Neighbor position: " << node_position[neighborId] << " at time: " << omnetpp::simTime() << '\n';
         if ((distance < radius) && isInObservationArea(node_position[neighborId])) 
           neighborhood.push_back(neighborId);
       }
@@ -68,14 +69,16 @@ void ConnectivityObserver::receiveSignal(
   omnetpp::cObject* value, 
   omnetpp::cObject* details
 ) {
-  static omnetpp::simtime_t current_time = 0.0;
   PositionObserver::receiveSignal(src, id, value, details);
   auto state = dynamic_cast<inet::MovingMobilityBase*>(value);
   inet::Coord current_position(state->getCurrentPosition());
-  if (isInObservationArea(current_position))
-    membership.insert(node_id);
-  else if (membership.find(node_id) != membership.end())
-    membership.erase(node_id);
+  if (isInObservationArea(current_position)) 
+      membership.insert(node_id);
+  else {
+    auto it = membership.find(node_id);
+    if (it != membership.end())
+      membership.erase(it);
+  } 
 }
 
 void ConnectivityObserver::finish() {
@@ -86,7 +89,7 @@ void ConnectivityObserver::finish() {
         if (time > llt_min)
           ofs << time << ' ';
         else
-          ofs << time << 0;
+          ofs << 0 << ' ';
       }
       ofs << std::endl;
     }
@@ -116,7 +119,7 @@ void ConnectivityObserver::computeNewNeighbors(
       ) == neighborhood_list->at(id).end()
     ) {
       neighborhood_list->at(id).push_back(cn);
-      std::cout << "\tnode: " << cn << " is new neighbor of node " << id << " at " << omnetpp::simTime() << "\n";
+      EV_INFO<< "\tnode: " << cn << " is new neighbor of node " << id << " at " << omnetpp::simTime() << "\n";
     }
     else 
       //This increment only works if nodes emit a signal each second
@@ -136,7 +139,7 @@ void ConnectivityObserver::computeOldNeighbors(
                 [n_it] (unsigned x) { return x == *n_it; }
               );
     if (n_jt == current_neighborhood.end()) {
-      EV << "Erase node: " << *n_it << '\n';
+      EV_INFO << "Erase node: " << *n_it << '\n';
       neighborhood_list->at(node_id).erase(n_it++);
     }
     else 
@@ -146,31 +149,32 @@ void ConnectivityObserver::computeOldNeighbors(
 
 void ConnectivityObserver::handleMessage(omnetpp::cMessage* msg) {
   if (msg->isSelfMessage()) {
-    std::cout << "Simulation time: " << omnetpp::simTime() <<'\n';
-    std::cout << "Membership: ";
+    EV_INFO << "Simulation time: " << omnetpp::simTime() <<'\n';
+    EV_INFO << "Membership: ";
     for (auto& member : membership)
-      std::cout << member << ' ';
-    std::cout << '\n';
+      EV_INFO << member << ' ';
+    EV_INFO << '\n';
     for (auto& member : membership) {
       std::list<unsigned> current_neighborhood = 
         computeOneHopNeighborhood(member);
       std::list<unsigned> new_neighbor;
 
-      std::cout << "Current neighborhood of node " 
+      EV_INFO << "Current neighborhood of node " 
                 << member << "\n";
       for (auto& nid : current_neighborhood)
-        std::cout << "\tid: " << nid << "\n";
+        EV_INFO << "\tid: " << nid << "\n";
 
       computeNewNeighbors(member, current_neighborhood);
 
-      EV << "neighbor list of node: " << member << '\n';
+      EV_INFO << "neighbor list of node: " << member << '\n';
       for (auto& nid : neighborhood_list->at(member))
-        EV << "neighbor: " << nid << '\n';
+        EV_INFO << "neighbor: " << nid << '\n';
 
       computeOldNeighbors(member, current_neighborhood);
     }
-    std::cout << "Adjacency matrix\n" << adjacency_matrix;
     scheduleAt(omnetpp::simTime()+1.0, msg);
+    membership_size = membership.size();
+    emit(membership_stat, membership.size());
   }
   else
     error("Connectivity Observer: This module does not receive messages\n");

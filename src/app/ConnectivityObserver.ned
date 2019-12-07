@@ -20,5 +20,5 @@ simple ConnectivityObserver extends PositionObserver {
         int minLLT @unit(s);
         string filename;
         @signal[membership](type=long);
-        @statistic[membership](record=vector);
+        @statistic[membership](record=histogram,vector);
 }
