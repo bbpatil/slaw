@@ -14,15 +14,11 @@
 
 package slaw.app;
 
-simple ConnectivityObserver extends PositionObserver {
+simple GlobalConnectivityObserver extends PositionObserver {
     parameters:
-        @class(ConnectivityObserver);
+        @class(GlobalConnectivityObserver);
         int minLLT @unit(s);
         string filename;
         @signal[membership](type=long);
         @statistic[membership](record=histogram,vector);
-        @signal[arrival](type=long);
-        @statistic[arrival](record=histogram,vector);
-        @signal[departure](type=long);
-        @statistic[departure](record=histogram,vector);
 }
