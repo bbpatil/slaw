@@ -3,12 +3,14 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 class AdjacencyMatrix {
 private:
   std::vector< std::vector<unsigned> >* m;
+  bool state;
 public:
-  AdjacencyMatrix() : m(nullptr) {}
+  AdjacencyMatrix() : m(nullptr), state(false) {}
   ~AdjacencyMatrix() {
     if (m)
       delete m;
@@ -27,6 +29,20 @@ public:
   unsigned& get(size_t row, size_t col) const {
     return m->at(row).at(col);
   }
+  void set_state() {state = true;}
+  void reset_state() {state = false;}
+  bool is_set() {return state;}
+  void write(const char* filename) {
+    std::ofstream ofs(filename);
+    if (ofs.is_open()) {
+      for (auto& row : *m) {
+        for (auto& element: row)
+          ofs << element << ' ';
+        ofs << '\n';
+      }
+      ofs.close();
+    }
+  } 
   friend std::ostream& operator<<(std::ostream& os, const AdjacencyMatrix& am) {
     for (auto& row : *(am.get())) {
       for (auto& element : row)

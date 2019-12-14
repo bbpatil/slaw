@@ -17,8 +17,5 @@ package slaw.app;
 simple GlobalConnectivityObserver extends PositionObserver {
     parameters:
         @class(GlobalConnectivityObserver);
-        int minLLT @unit(s);
         string filename;
-        @signal[membership](type=long);
-        @statistic[membership](record=histogram,vector);
 }

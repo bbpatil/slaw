@@ -39,6 +39,7 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/app/ConnectivityObserver.o \
     $O/app/FlightLengthObserver.o \
+    $O/app/GlobalConnectivityObserver.o \
     $O/app/InterContactTimeObserver.o \
     $O/app/PositionObserver.o \
     $O/app/TripObserver.o \

@@ -1,9 +1,9 @@
 #include "GlobalConnectivityObserver.h"
+#include <cstdio>
 Define_Module(GlobalConnectivityObserver);
 
 GlobalConnectivityObserver::GlobalConnectivityObserver()
-  : neighborhood_list(nullptr), 
-    llt_min(0.0), 
+  : neighborhood_list(nullptr),
     msg(nullptr)
   { }
 
@@ -17,7 +17,6 @@ GlobalConnectivityObserver::~GlobalConnectivityObserver() {
 void GlobalConnectivityObserver::initialize(int stage) {
   if (stage == 0) {
     PositionObserver::initialize(stage);
-    llt_min = par("minLLT");
     filename = par("filename").stringValue();
     sample_size = par("observations");
     neighborhood_list = new std::vector< std::list<unsigned> >(node_number);
@@ -28,7 +27,7 @@ void GlobalConnectivityObserver::initialize(int stage) {
     msg->setSchedulingPriority(255); //the lowest priority
     scheduleAt(omnetpp::simTime(), msg);
     auto map_ptr = this->getSimulation()->getSystemModule()->
-                    getSubmodule("tripmanager")->getSubmodule("mapmodule");
+                   getSubmodule("tripmanager")->getSubmodule("mapmodule");
   }
 }
 
@@ -78,10 +77,10 @@ void GlobalConnectivityObserver::computeNewNeighbors(
       ) == neighborhood_list->at(id).end()
     ) {
       neighborhood_list->at(id).push_back(cn);
-      EV_INFO<< "\tnode: " << cn << " is new neighbor of node " << id << " at " << omnetpp::simTime() << "\n";
+      EV_INFO<< "\tnode: " << cn << " is new neighbor of node " 
+             << id << " at " << omnetpp::simTime() << "\n";
     }
-    else 
-      //This increment only works if nodes emit a signal each second
+    else
       adjacency_matrix.get(id, cn)++;
   }
 }
@@ -99,9 +98,9 @@ void GlobalConnectivityObserver::computeOldNeighbors(
               );
     if (n_jt == current_neighborhood.end()) {
       EV_INFO << "Erase node: " << *n_it << '\n';
-      neighborhood_list->at(node_id).erase(n_it++);
+      neighborhood_list->at(id).erase(n_it++);
     }
-    else 
+    else
       ++n_it;
   }
 }
@@ -109,27 +108,35 @@ void GlobalConnectivityObserver::computeOldNeighbors(
 void GlobalConnectivityObserver::handleMessage(omnetpp::cMessage* msg) {
   if (msg->isSelfMessage()) {
     EV_INFO << "Simulation time: " << omnetpp::simTime() <<'\n';
-    EV_INFO << '\n';
     for (int id = 0; id < node_number; id++) {
       std::list<unsigned> current_neighborhood = 
         computeOneHopNeighborhood(id);
       std::list<unsigned> new_neighbor;
 
       EV_INFO << "Current neighborhood of node " 
-              << id << "\n";
+              << id << ':';
       for (auto& nid : current_neighborhood)
-        EV_INFO << "\tid: " << nid << "\n";
+        EV_INFO << ' ' << nid;
+      EV_INFO << "\n";
 
       computeNewNeighbors(id, current_neighborhood);
 
-      EV_INFO << "neighbor list of node: " << id << '\n';
+      EV_INFO << "neighbor list of node: " << id << ':';
       for (auto& nid : neighborhood_list->at(id))
-        EV_INFO << "neighbor: " << nid << '\n';
+        EV_INFO << ' ' << nid;
+      EV_INFO << '\n';
 
       computeOldNeighbors(id, current_neighborhood);
     }
     scheduleAt(omnetpp::simTime() + 1.0, msg);
+
+    EV_INFO << "Adjacency matrix:\n";
+    EV_INFO << adjacency_matrix;
   }
   else
     error("GlobalConnectivityObserver: This module does not receive messages\n");
+}
+
+void GlobalConnectivityObserver::finish() {
+  adjacency_matrix.write(filename);
 }

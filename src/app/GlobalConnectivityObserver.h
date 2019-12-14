@@ -6,6 +6,7 @@
 #include <list>
 #include <fstream>
 #include <set>
+#include <string>
 #include <omnetpp.h>
 
 #include "PositionObserver.h"
@@ -19,8 +20,6 @@ protected:
   omnetpp::cMessage* msg;
   /** @brief File where the adjacency matrix will be stored */
   const char* filename;
-  /** @brief The minimum link lifetime to considered a link was established */
-  unsigned llt_min;
 protected:
   /** @brief Data structures storing link lifetimes */
   AdjacencyMatrix adjacency_matrix;
@@ -46,6 +45,8 @@ public:
   virtual void initialize(int stage) override;
   /** @brief Computes the adjacency matrix */
   virtual void handleMessage(omnetpp::cMessage*);
+  /** @brief Writes the adjacency matrix of the system */
+  virtual void finish() override;
 };
 
 #endif
