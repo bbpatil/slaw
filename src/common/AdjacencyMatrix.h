@@ -43,6 +43,17 @@ public:
       ofs.close();
     }
   } 
+  void write_ratio(const char* filename, double d) {
+    std::ofstream ofs(filename);
+    if (ofs.is_open()) {
+      for (auto& row : *m) {
+        for (auto& element: row)
+          ofs << double(element)/d << ' ';
+        ofs << '\n';
+      }
+      ofs.close();
+    }
+  } 
   friend std::ostream& operator<<(std::ostream& os, const AdjacencyMatrix& am) {
     for (auto& row : *(am.get())) {
       for (auto& element : row)

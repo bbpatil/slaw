@@ -20,10 +20,12 @@ protected:
   omnetpp::cMessage* msg;
   /** @brief File where the adjacency matrix will be stored */
   const char* filename;
+  /** @brief The signal carrying the degree per node */
+  static omnetpp::simsignal_t degree;
 protected:
   /** @brief Data structures storing link lifetimes */
   AdjacencyMatrix adjacency_matrix;
-  /** @brief Data structure storing N(x) with pairs <id, time> */
+  /** @brief Data structure storing N(x) */
   std::vector< std::list<unsigned> >* neighborhood_list;
 protected:
   /** @brief Computes the one-hop neighborhood of a node x being at observation area */

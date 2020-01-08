@@ -18,4 +18,6 @@ simple GlobalConnectivityObserver extends PositionObserver {
     parameters:
         @class(GlobalConnectivityObserver);
         string filename;
+        @signal[degree](type=long);
+        @statistic[degree](record=histogram,vector);
 }

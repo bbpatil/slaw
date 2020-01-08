@@ -1,0 +1,9 @@
+#!/bin/zsh
+config=$1
+seed=$2
+echo "Start seed: $seed"
+echo "Config name: $config"
+for (( i=$seed; i<$(($seed + 8)); i++ ));
+do
+../src/slaw -n .:../src -u Cmdenv -c $config --seed-set=$i &
+done

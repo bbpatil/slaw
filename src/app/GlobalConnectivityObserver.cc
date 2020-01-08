@@ -2,6 +2,8 @@
 #include <cstdio>
 Define_Module(GlobalConnectivityObserver);
 
+omnetpp::simsignal_t GlobalConnectivityObserver::degree = registerSignal("degree");
+
 GlobalConnectivityObserver::GlobalConnectivityObserver()
   : neighborhood_list(nullptr),
     msg(nullptr)
@@ -111,6 +113,7 @@ void GlobalConnectivityObserver::handleMessage(omnetpp::cMessage* msg) {
     for (int id = 0; id < node_number; id++) {
       std::list<unsigned> current_neighborhood = 
         computeOneHopNeighborhood(id);
+      emit(degree, current_neighborhood.size());
       std::list<unsigned> new_neighbor;
 
       EV_INFO << "Current neighborhood of node " 
@@ -138,5 +141,5 @@ void GlobalConnectivityObserver::handleMessage(omnetpp::cMessage* msg) {
 }
 
 void GlobalConnectivityObserver::finish() {
-  adjacency_matrix.write(filename);
+  adjacency_matrix.write_ratio(filename, omnetpp::simTime().dbl());
 }
