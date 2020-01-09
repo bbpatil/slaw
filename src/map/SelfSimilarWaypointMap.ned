@@ -22,4 +22,5 @@ simple SelfSimilarWaypointMap {
     double clusteringRadius @unit(m);
     double hurstParameter;
     int observationArea = default(-1);
+    bool showObservationArea = default(false);
 }

@@ -38,14 +38,16 @@ void SelfSimilarWaypointMap::initialize(int stage) {
         computeAreaWeights();
         saveAreaVector();
         drawMap();
-        //drawConvexHull();
+        if (par("showObservationArea").boolValue())
+          drawConvexHull();
       }
       else
         error("SelfSimilarWaypointMap: load map fails\n");
     }
     else{
       drawMap();
-      //drawConvexHull();
+      if (par("showObservationArea").boolValue())
+        drawConvexHull();
     }
   }
 }

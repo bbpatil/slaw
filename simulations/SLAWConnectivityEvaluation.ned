@@ -23,9 +23,12 @@ network SLAWConnectivityEvaluation
         tripmanager.speedModelType = speedModelType;
         @display("bgb=1000,1000;bgg=100,2,grey50");
     submodules:
-        tripmanager: TripManager;
+        tripmanager: TripManager {
+            @display("p=48.191998,246.984");
+        }
         walker[numHosts]: Walker {
             mobilityType = "SlawMobility";
+            @display("p=883.51996,887.53595");
         }
         observer: <"ConnectivityObserver"> like IObserver {
             filename = filename;
@@ -35,6 +38,6 @@ network SLAWConnectivityEvaluation
             y_length = height;
             radius = coverageRadius;
             minLLT = minLifetime;
-            @display("p=480,400");
+            @display("p=48.191998,100.399994");
         }
 }
