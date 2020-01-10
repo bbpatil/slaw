@@ -1,6 +1,6 @@
 package slaw.simulations;
 
-import slaw.contract.IObserver;
+import slaw.app.InterContactTimeObserver;
 import slaw.walker.Walker;
 import slaw.tripmanager.TripManager;
 
@@ -20,19 +20,18 @@ network SLAWInterContactEvaluation
         tripmanager.walkerModelType = walkerModelType;
         tripmanager.walkermodel.numOfWalker = numHosts;
         tripmanager.pauseTimeModelType = pauseTimeModelType;
-        tripmanager.speedModelType = speedModelType;        
-        string observerType = "InterContactTimeObserver";
+        tripmanager.speedModelType = speedModelType;
         @display("bgb=2000,2000;bgg=100,2,grey50");
     submodules:
         tripmanager: TripManager;
         walker[numHosts]: Walker {
             mobilityType = "SlawMobility";
         }
-        observer: <observerType> like IObserver {
-            node_number = numHosts;
+        observer: InterContactTimeObserver {
+            numOfNodes = numHosts;
             observations = observations;
-            x_length = width;
-            y_length = height;
+            xLength = width;
+            yLength = height;
             radius = coverageRadius;
             minICT = minInterContactTime;
             minLLT = minLifetime;

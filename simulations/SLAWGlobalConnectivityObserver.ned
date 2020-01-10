@@ -30,8 +30,8 @@ network SLAWGlobalConnectivityEvaluation
             filename = filename;
             numOfNodes = numHosts;
             observations = observations;
-            x_length = width;
-            y_length = height;
+            xLength = width;
+            yLength = height;
             radius = coverageRadius;
             @display("p=480,400");
         }

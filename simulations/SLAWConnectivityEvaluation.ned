@@ -34,8 +34,8 @@ network SLAWConnectivityEvaluation
             filename = filename;
             numOfNodes = numHosts;
             observations = observations;
-            x_length = width;
-            y_length = height;
+            xLength = width;
+            yLength = height;
             radius = coverageRadius;
             minLLT = minLifetime;
             @display("p=48.191998,100.399994");

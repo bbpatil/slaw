@@ -16,8 +16,6 @@
 package slaw.walkermodel;
 
 import slaw.contract.IWalkerModel;
-import slaw.contract.IPauseTime;
-import slaw.contract.ISpeed;
 
 simple SlawTransNetw like IWalkerModel {
   parameters:
