@@ -12,16 +12,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 
-package slaw.app;
-import slaw.contract.IObserver;
+package slaw.observer;
 
-simple TripObserver like IObserver{
-    @display("i=block/cogwheel");
-    int observations;
-    @signal[nextWaypointX](type=double);
-    @statistic[nextWaypointX](record=vector);
-    @signal[nextWaypointY](type=double);
-    @statistic[nextWaypointY](record=vector);
-    @signal[tripSize_stat](type=long);
-    @statistic[tripSize_stat](record=histogram,vector);
+simple InterContactTimeObserver extends PositionObserver {
+    parameters:
+        @class(InterContactTimeObserver);
+        double minICT @unit(s);
+        double minLLT @unit(s);
+        @signal[linkLifetime](type=double);
+        @statistic[linkLifetime](record=stats,vector; unit=s);
+        @signal[interContactTime](type=double);
+        @statistic[interContactTime](record=stats,vector; unit=s;);
 }

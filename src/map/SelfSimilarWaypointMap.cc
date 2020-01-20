@@ -191,10 +191,12 @@ void SelfSimilarWaypointMap::computeAreaWeights() {
 }
 
 const Area* SelfSimilarWaypointMap::getConfinedArea(unsigned index) {
+  Enter_Method_Silent();
   return static_cast<const Area*>(&area_vector->at(index));
 }
 
 const std::vector<unsigned>* SelfSimilarWaypointMap::getAreaWeights() {
+  Enter_Method_Silent();
   return static_cast<const std::vector<unsigned>*>(weight_vector);
 }
 
@@ -203,6 +205,7 @@ const std::vector<unsigned>* SelfSimilarWaypointMap::getAreaWeights() {
 // }
 
 int SelfSimilarWaypointMap::getAreaSize(unsigned index) {
+  Enter_Method_Silent();
   int size = -1;
   if (area_vector && (index < area_vector->size()))
     size = unsigned(area_vector->at(index).size());
@@ -210,6 +213,7 @@ int SelfSimilarWaypointMap::getAreaSize(unsigned index) {
 }
 
 int SelfSimilarWaypointMap::getNumberOfAreas() {
+  Enter_Method_Silent();
   int size = -1;
   if (area_vector)
     size = int(area_vector->size());
@@ -218,6 +222,7 @@ int SelfSimilarWaypointMap::getNumberOfAreas() {
 
 inet::Coord
 SelfSimilarWaypointMap::getWaypoint(unsigned indexArea, unsigned index) {
+  Enter_Method_Silent();
   inet::Coord waypoint(-1.0, -1.0);
   if (indexArea < area_vector->size())
     if (index < area_vector->at(indexArea).size())
@@ -228,18 +233,21 @@ SelfSimilarWaypointMap::getWaypoint(unsigned indexArea, unsigned index) {
 void SelfSimilarWaypointMap::randomizeArea(
   omnetpp::cRNG* rng, unsigned area_index
 ) {
-    Area* area = &(area_vector->at(area_index));
-    for(size_t i = area->size() - 1; i > 0; --i) {
-      unsigned rnd = omnetpp::intuniform(rng, 0, i);
-      std::swap(area->at(i),area->at(rnd));
+  Enter_Method_Silent();
+  Area* area = &(area_vector->at(area_index));
+  for(size_t i = area->size() - 1; i > 0; --i) {
+    unsigned rnd = omnetpp::intuniform(rng, 0, i);
+    std::swap(area->at(i),area->at(rnd));
   }
 }
 
 unsigned SelfSimilarWaypointMap::getAreaID(inet::Coord& c) {
+  Enter_Method_Silent();
   return area_id_map[c];
 }
 
 bool SelfSimilarWaypointMap::isSameArea(inet::Coord& c1, inet::Coord& c2) {
+  Enter_Method_Silent();
   return area_id_map[c1] == area_id_map[c2];
 }
 

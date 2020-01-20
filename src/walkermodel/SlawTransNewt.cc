@@ -34,6 +34,7 @@ void SlawTransNetw::initialize(int stage) {
 void SlawTransNetw::setWalkerState(
   unsigned walkerId, AreaSet& C_k, WaypointList& L, inet::Coord& initialWaypoint
 ) {
+  Enter_Method_Silent();
   C_k = std::move(CkSet[walkerId]);
   initialWaypoint = homeList[walkerId];
   L = computeDestinationList(C_k, initialWaypoint);
@@ -121,6 +122,7 @@ inet::Coord SlawTransNetw::getNextDestination(
     WaypointList& uwl, const AreaSet& C_k, inet::Coord& lastWaypoint, 
     unsigned walkerID
 ) {
+  Enter_Method_Silent();
   inet::Coord nextWaypoint;
   if (uwl.empty()) {
     nextWaypoint = homeList[walkerID];

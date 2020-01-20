@@ -92,7 +92,10 @@ public:
   virtual void initialize(int stage) override;
   /** @brief Creates a selfsimilar waypoint map */
   //virtual void createMap();
-  virtual unsigned getNumberOfWaypoints(){ return waypoint_number;}
+  virtual unsigned getNumberOfWaypoints(){ 
+    Enter_Method_Silent();
+    return waypoint_number;
+  }
   /** @brief Returns the number of confined areas integrating the map */
   virtual int getNumberOfAreas();
   /** @brief Returns a pointer to the vector storing the waypoints comprising
@@ -120,6 +123,7 @@ public:
   virtual const char* getMapName() { return map_name; }
   /** @brief Returns the convex hull of the observation area */
   virtual const std::vector<point_2>* getConvexHull() {
+    Enter_Method_Silent();
     const std::vector<point_2>* ch = &convexhull;
     return ch;
   }

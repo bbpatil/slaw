@@ -11,22 +11,18 @@
 // 
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
 
-package slaw.app;
-import slaw.contract.IObserver;
+package slaw.observer;
 
-simple FlightLengthObserver like IObserver
-{
-    @display("i=block/cogwheel");
-    int observations;
-    bool classifyFlight = default(false);
-    @signal[flight_stat](type=double);
-    @statistic[flight_stat](record=histogram,vector; unit=m);
-    @signal[intraFlightLength_stat](type=double);
-    @statistic[intraFlightLength_stat](record=histogram,vector; unit=m);
-    @signal[interFlightLength_stat](type=double);
-    @statistic[interFlightLength_stat](record=histogram,vector; unit=m);
-    @signal[remoteRandomArea_stat](type=bool);
-    @statistic[remoteRandomArea_stat](record=vector);
+simple ConnectivityObserver extends PositionObserver {
+    parameters:
+        @class(ConnectivityObserver);
+        int minLLT @unit(s);
+        string filename;
+        @signal[membership](type=long);
+        @statistic[membership](record=histogram,vector);
+        @signal[arrival](type=long);
+        @statistic[arrival](record=histogram,vector);
+        @signal[departure](type=long);
+        @statistic[departure](record=histogram,vector);
 }

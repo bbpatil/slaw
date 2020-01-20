@@ -1,6 +1,6 @@
 package slaw.simulations;
 
-import slaw.app.InterContactTimeObserver;
+import slaw.observer.InterContactTimeObserver;
 import slaw.walker.Walker;
 import slaw.tripmanager.TripManager;
 

@@ -35,6 +35,7 @@ void SlawMatlab::initialize(int stage) {
 void SlawMatlab::setWalkerState(
   unsigned walkerId, AreaSet& C_k, WaypointList& L, inet::Coord& initialWaypoint
 ) {
+  Enter_Method_Silent();
   C_k = std::move(CkSet[walkerId]);
   inet::Coord temp(-1.0, -1.0);
   L = computeDestinationList(C_k, temp);
@@ -105,6 +106,7 @@ inet::Coord SlawMatlab::getNextDestination(
     WaypointList& uwl, const AreaSet& C_k, inet::Coord& lastWaypoint,
     unsigned id //This argument is not utilized in this member function
 ) {
+  Enter_Method_Silent();
   inet::Coord nextWaypoint;
   if (uwl.empty())
     uwl = std::move(computeDestinationList(C_k, lastWaypoint));

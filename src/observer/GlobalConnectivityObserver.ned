@@ -12,17 +12,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 
-package slaw.app;
+package slaw.observer;
 
-simple ConnectivityObserver extends PositionObserver {
+simple GlobalConnectivityObserver extends PositionObserver {
     parameters:
-        @class(ConnectivityObserver);
-        int minLLT @unit(s);
+        @class(GlobalConnectivityObserver);
         string filename;
-        @signal[membership](type=long);
-        @statistic[membership](record=histogram,vector);
-        @signal[arrival](type=long);
-        @statistic[arrival](record=histogram,vector);
-        @signal[departure](type=long);
-        @statistic[departure](record=histogram,vector);
+        @signal[degree](type=long);
+        @statistic[degree](record=histogram,vector);
 }

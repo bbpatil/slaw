@@ -12,15 +12,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 
-package slaw.app;
+package slaw.observer;
+import slaw.contract.IObserver;
 
-simple InterContactTimeObserver extends PositionObserver {
-    parameters:
-        @class(InterContactTimeObserver);
-        double minICT @unit(s);
-        double minLLT @unit(s);
-        @signal[linkLifetime](type=double);
-        @statistic[linkLifetime](record=stats,vector; unit=s);
-        @signal[interContactTime](type=double);
-        @statistic[interContactTime](record=stats,vector; unit=s;);
+simple PositionObserver like IObserver {
+    @display("i=block/cogwheel");
+    int observations;
+    int numOfNodes;
+    double radius @unit(m);
+    double xLength @unit(m);
+    double yLength @unit(m);
 }

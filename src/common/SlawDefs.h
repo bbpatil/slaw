@@ -46,7 +46,7 @@ std::vector<T>& randomizeVector(omnetpp::cRNG* rng, std::vector<T>& v) {
 
 /** @brief List to store the unvisited waypoints integrating the trip of a 
  *  walker. A list is employed to efficiently remove a waypoint once LATP
- *  is inviked. */
+ *  is invoked. */
 typedef std::list<inet::Coord> WaypointList;
 
 /** @brief Vector used to stored the confined areas of a walker. According to
@@ -56,13 +56,13 @@ typedef std::vector<unsigned> AreaSet;
 /** @brief Vector used to represent confined areas c_i. */
 typedef std::vector<inet::Coord> Area;
 
-/** @brief Enumeration mapping the possible pause time models this implamentation provides. The PARETO:BOUNDED is the most appropiate */
+/** @brief Enumeration mapping the possible pause time models this implementation provides. The PARETO:BOUNDED is the most appropiate */
 enum class PauseTimeModelType : uint8_t {
   CONSTANT = 1, UNIFORM = 2, NORMAL = 3, PARETO_BOUNDED = 4
 };
 
 /** @brief Enumeration mapping the speed models this implementation provides.
- *  For pedestrian motion, the normal model is the most appropiate. If it is
+ *  For pedestrian motion, the normal model is the most appropriate. If it is
  *  suppose a transportation mean is used, then the Rhee's model is the best 
  *  option to configure the simulator. */
 enum class SpeedModelType : uint8_t {
