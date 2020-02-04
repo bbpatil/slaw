@@ -31,23 +31,23 @@ EXTRA_OBJS =
 LIBS = $(LDFLAG_LIBPATH)/home/geo/inet4/out/gcc-release/src/  -lINET -lCGAL -lgmp
 
 # Output directory
-PROJECT_OUTPUT_DIR = out
-PROJECTRELATIVE_PATH =
+PROJECT_OUTPUT_DIR = ../out
+PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/app/ConnectivityObserver.o \
-    $O/app/FlightLengthObserver.o \
-    $O/app/GlobalConnectivityObserver.o \
-    $O/app/InterContactTimeObserver.o \
-    $O/app/PositionObserver.o \
-    $O/app/TripObserver.o \
     $O/contract/IWalkerModel.o \
     $O/latp/LATP.o \
     $O/map/SelfSimilarWaypointMap.o \
     $O/mobility/SlawBonnMotion.o \
     $O/mobility/SlawMobility.o \
+    $O/observer/ConnectivityObserver.o \
+    $O/observer/FlightLengthObserver.o \
+    $O/observer/GlobalConnectivityObserver.o \
+    $O/observer/InterContactTimeObserver.o \
+    $O/observer/PositionObserver.o \
+    $O/observer/TripObserver.o \
     $O/pausetime/BParetoPauseTimeModel.o \
     $O/pausetime/ConstantPauseTimeModel.o \
     $O/pausetime/NormalPauseTimeModel.o \
